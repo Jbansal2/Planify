@@ -27,7 +27,7 @@ function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col lg:flex-row overflow-hidden font-sans dark:bg-[#0b0b0b] transition-colors duration-300">
+    <div className="min-h-screen bg-[#0b0b0b] flex flex-col lg:flex-row overflow-hidden font-sans transition-colors duration-300">
       {/* Left Side: Visual Asset */}
       <div className="hidden lg:block lg:w-1/2 relative">
         <img

@@ -23,7 +23,7 @@ function App() {
     <ThemeProvider>
       <AuthProvider>
         <Router>
-          <div className="min-h-screen bg-gray-50 text-gray-900 font-sans selection:bg-[#ff5c00]/30 dark:bg-[#0b0b0b] dark:text-white transition-colors duration-300">
+          <div className="min-h-screen bg-[#0b0b0b] text-gray-900 font-sans selection:bg-[#ff5c00]/30 dark:text-white transition-colors duration-300">
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
