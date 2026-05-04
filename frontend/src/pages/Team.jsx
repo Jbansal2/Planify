@@ -61,11 +61,13 @@ function Team() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col lg:flex-row font-sans dark:bg-[#0b0b0b] transition-colors duration-300">
+    <div className="h-screen bg-gray-50 flex flex-col lg:flex-row font-sans dark:bg-[#0b0b0b] transition-colors duration-300 overflow-hidden">
       <Sidebar />
 
-      <main className="flex-1 p-4 sm:p-8 lg:p-12 overflow-y-auto">
+      <main className="flex-1 flex flex-col overflow-y-auto">
         <Header title="Team Management" />
+
+        <div className="p-4 sm:p-6 lg:p-8 pt-0">
 
         <div className="flex justify-between items-center mb-8 border-b border-gray-100 pb-4 dark:border-white/5">
           <div className="flex items-center gap-3">
@@ -161,6 +163,7 @@ function Team() {
             )}
           </div>
         )}
+        </div>
       </main>
     </div>
   );

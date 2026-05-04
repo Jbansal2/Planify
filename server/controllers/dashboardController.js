@@ -1,6 +1,7 @@
 const Project = require('../models/Project');
 const Task = require('../models/Task');
 const Notification = require('../models/Notification');
+const User = require('../models/User');
 
 exports.getStats = async (req, res) => {
   try {
@@ -25,6 +26,33 @@ exports.getStats = async (req, res) => {
     const mediumPriority = tasks.filter(t => t.priority === 'Medium').length;
     const lowPriority = tasks.filter(t => t.priority === 'Low').length;
 
+    // Real Team Progress Calculation
+    const teamStatsMap = {};
+    tasks.forEach(task => {
+      if (task.assignee) {
+        const assigneeId = task.assignee.toString();
+        if (!teamStatsMap[assigneeId]) {
+          teamStatsMap[assigneeId] = { total: 0, completed: 0 };
+        }
+        teamStatsMap[assigneeId].total++;
+        if (task.status === 'Done') teamStatsMap[assigneeId].completed++;
+      }
+    });
+
+    // Get user details for the team members
+    const teamMemberIds = Object.keys(teamStatsMap);
+    const users = await User.find({ _id: { $in: teamMemberIds } });
+    
+    const teamProgress = users.map(user => ({
+      name: user.name,
+      avatar: user.name.split(' ').map(n => n[0]).join('').toUpperCase(),
+      completed: teamStatsMap[user._id.toString()].completed,
+      total: teamStatsMap[user._id.toString()].total
+    })).sort((a, b) => (b.completed / b.total) - (a.completed / a.total))
+      .slice(0, 5);
+
+    console.log('DEBUG: Team Progress Data:', teamProgress);
+
     res.json({
       totalProjects: projects.length,
       activeTasks: todoTasks + inProgressTasks,
@@ -39,7 +67,8 @@ exports.getStats = async (req, res) => {
         { name: 'High', value: highPriority },
         { name: 'Medium', value: mediumPriority },
         { name: 'Low', value: lowPriority }
-      ]
+      ],
+      teamProgress // New real data
     });
   } catch (err) {
     res.status(500).json({ message: err.message });

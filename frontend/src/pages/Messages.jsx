@@ -75,8 +75,10 @@ function Messages() {
   return (
     <div className="h-screen bg-gray-50 flex flex-col lg:flex-row font-sans dark:bg-[#0b0b0b] transition-colors duration-300 overflow-hidden">
       <Sidebar />
-      <main className="flex-1 p-4 sm:p-8 lg:p-12 flex flex-col min-h-0">
+      <main className="flex-1 flex flex-col min-h-0 overflow-hidden">
         <Header title="Messages" />
+
+        <div className="flex-1 p-4 sm:p-8 lg:p-12 pt-0 flex flex-col min-h-0">
 
         <div className="flex-1 flex gap-6 min-h-0 relative">
           {/* Left Panel: Contacts List */}
@@ -314,6 +316,7 @@ function Messages() {
               )}
             </AnimatePresence>
           </div>
+        </div>
         </div>
       </main>
     </div>

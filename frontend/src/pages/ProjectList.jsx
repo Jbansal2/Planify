@@ -54,13 +54,15 @@ function ProjectList() {
   const avatarColors = ['bg-blue-500', 'bg-green-500', 'bg-purple-500', 'bg-pink-500', 'bg-yellow-500'];
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col lg:flex-row font-sans dark:bg-[#0b0b0b] transition-colors duration-300">
+    <div className="h-screen bg-gray-50 flex flex-col lg:flex-row font-sans dark:bg-[#0b0b0b] transition-colors duration-300 overflow-hidden">
       <Sidebar />
 
-      <main className="flex-1 p-4 sm:p-8 lg:p-12 overflow-y-auto">
+      <main className="flex-1 flex flex-col overflow-y-auto">
         <Header title="Projects" />
 
-        <div className="flex justify-between items-center mb-8 border-b border-gray-100 pb-4 dark:border-white/5">
+        <div className="p-4 sm:p-6 lg:p-8 pt-0">
+
+        <div className="flex justify-between items-center mb-6 border-b border-gray-100 pb-4 dark:border-white/5">
           <div className="flex items-center gap-3">
             <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">Active</span>
             <span className="text-sm font-bold text-gray-700 bg-gray-200 px-3 py-1 rounded-full dark:text-white dark:bg-white/10">{projects.length} PROJECTS</span>
@@ -79,73 +81,119 @@ function ProjectList() {
           )}
         </div>
 
-        <div className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
           {projects.length === 0 ? (
-            <div className="text-center py-20 text-gray-500">No active projects found.</div>
+            <div className="col-span-full text-center py-20 text-gray-500">No active projects found.</div>
           ) : (
             projects.map((project, i) => {
-              const allMembers = [project.owner, ...(project.members || [])];
+              const allMembers = [project.owner, ...(project.members || [])].filter(Boolean);
               const displayMembers = allMembers.slice(0, 4);
               const extraMembersCount = allMembers.length > 4 ? allMembers.length - 4 : 0;
-              const isOverdue = project.dueDate && new Date(project.dueDate) < new Date();
+              
+              // Calculate progress
+              const totalTasks = project.totalTasks || 0;
+              const completedTasks = project.completedTasks || 0;
+              const progress = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+
+              // Determine Icon based on title (mock logic for visual appeal)
+              let iconColor = "bg-blue-50 text-blue-600";
+              let Icon = (
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                </svg>
+              );
+
+              if (project.title.toLowerCase().includes('dev')) {
+                iconColor = "bg-purple-50 text-purple-600";
+                Icon = (
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                  </svg>
+                );
+              } else if (project.title.toLowerCase().includes('mark')) {
+                iconColor = "bg-yellow-50 text-yellow-600";
+                Icon = (
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.167H3.353a1.765 1.765 0 01-1.447-2.783l2.49-3.599ZM14.5 21V3M14.5 13h5.25a2.25 2.25 0 000-4.5H14.5" />
+                  </svg>
+                );
+              }
 
               return (
                 <motion.div 
                   key={project._id}
-                  initial={{ opacity: 0, y: 10 }}
+                  initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.05 }}
+                  transition={{ delay: i * 0.1 }}
+                  className="bg-white rounded-[2.5rem] p-6 shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 dark:bg-[#111113] dark:border-white/5 group relative"
                 >
-                  <Link 
-                    to={`/projects/${project._id}`}
-                    className="flex flex-col xl:flex-row items-center justify-between p-6 bg-white border border-gray-100 hover:border-gray-200 rounded-2xl group transition-all shadow-sm dark:bg-[#111113] dark:border-white/5 dark:hover:border-white/10 dark:shadow-none"
-                  >
-                    {/* Icon & Title */}
-                    <div className="flex items-center gap-4 w-full xl:w-1/3 mb-4 xl:mb-0">
-                      <div className="w-12 h-12 rounded-xl bg-gray-100 text-gray-900 flex items-center justify-center text-xl font-bold group-hover:bg-[#ff5c00] group-hover:text-white transition-all dark:bg-[#2a2a2c] dark:text-white">
-                        {project.title.charAt(0).toUpperCase()}
-                      </div>
-                      <div>
-                        <h3 className="text-gray-900 font-bold text-lg leading-tight dark:text-white">{project.title}</h3>
-                        <p className="text-gray-500 text-sm">Workspace</p>
-                      </div>
+                  <Link to={`/projects/${project._id}`} className="absolute inset-0 z-0" />
+                  
+                  {/* Top Row: Icon & Menu */}
+                  <div className="flex justify-between items-start mb-4">
+                    <div className={`w-14 h-14 rounded-2xl flex items-center justify-center ${iconColor} dark:bg-white/5`}>
+                      {Icon}
+                    </div>
+                    <button className="w-10 h-10 flex items-center justify-center text-gray-400 hover:text-gray-900 hover:bg-gray-50 rounded-full transition-all dark:hover:text-white dark:hover:bg-white/5 relative z-10">
+                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM18 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                      </svg>
+                    </button>
+                  </div>
+
+                  {/* Title & Description */}
+                  <div className="mb-6">
+                    <h3 className="text-xl font-extrabold text-gray-900 dark:text-white mb-2 group-hover:text-[#ff5c00] transition-colors">{project.title}</h3>
+                    <p className="text-gray-400 text-sm leading-relaxed line-clamp-2">
+                      {project.description || "No description provided for this project. Start adding tasks to see progress."}
+                    </p>
+                  </div>
+
+                  <div className="space-y-4 pt-4 border-t border-gray-50 dark:border-white/5">
+                    {/* Tasks Info */}
+                    <div>
+                      <p className="text-sm font-bold text-gray-900 dark:text-white mb-1">Tasks</p>
+                      <p className="text-xs font-bold text-gray-400">{completedTasks} of {totalTasks} completed</p>
                     </div>
 
-                    {/* Tasks Counter */}
-                    <div className="w-full xl:w-1/6 mb-4 xl:mb-0">
-                      <p className="text-gray-900 font-bold dark:text-white"><span className="text-[#ff5c00]">{project.completedTasks || 0}</span> / {project.totalTasks || 0}</p>
-                      <p className="text-gray-500 text-sm">Tasks</p>
-                    </div>
-
-                    {/* Members/Owner Area (Replaces Budget in mockup) */}
-                    <div className="w-full xl:w-1/6 mb-4 xl:mb-0">
-                      <p className="text-gray-900 font-bold dark:text-white">{allMembers.length} Members</p>
-                      <p className="text-gray-500 text-sm">Involved</p>
-                    </div>
-
-                    {/* Due Date */}
-                    <div className="w-full xl:w-1/6 mb-4 xl:mb-0 flex justify-start xl:justify-center">
-                      <span className={`text-xs font-bold px-4 py-2 rounded-lg ${isOverdue ? 'bg-red-500/10 text-red-500' : 'bg-gray-100 text-gray-700 dark:bg-[#1a1a1c] dark:text-gray-300'}`}>
-                        {formatDueDate(project.dueDate)}
-                      </span>
-                    </div>
-
-                    {/* Avatars */}
-                    <div className="w-full xl:w-1/6 flex justify-start xl:justify-end items-center">
-                      <div className="flex -space-x-3">
-                        {displayMembers.map((mem, idx) => (
-                          <div key={mem._id || idx} className={`w-8 h-8 rounded-full border-2 border-white flex items-center justify-center text-[10px] text-white font-bold ${idx === 0 ? 'bg-[#ff5c00]' : avatarColors[idx % avatarColors.length]} z-${30 - idx * 10} dark:border-[#111113]`}>
-                            {mem.name ? mem.name.charAt(0).toUpperCase() : 'U'}
-                          </div>
-                        ))}
-                        {extraMembersCount > 0 && (extraMembersCount > 0 && (
-                          <div className="w-8 h-8 rounded-full border-2 border-white bg-gray-200 flex items-center justify-center text-[10px] text-gray-900 font-bold z-0 dark:border-[#111113] dark:bg-[#2a2a2c] dark:text-white">
-                            +{extraMembersCount}
-                          </div>
-                        ))}
+                    {/* Progress Bar */}
+                    <div>
+                      <p className="text-sm font-bold text-gray-900 dark:text-white mb-3">Progress</p>
+                      <div className="flex items-center gap-4">
+                        <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden dark:bg-white/5">
+                          <motion.div 
+                            initial={{ width: 0 }}
+                            animate={{ width: `${progress}%` }}
+                            transition={{ duration: 1, ease: "easeOut" }}
+                            className="h-full bg-green-500 rounded-full"
+                          />
+                        </div>
+                        <p className="text-xs font-bold text-gray-400 shrink-0">{progress}%</p>
                       </div>
                     </div>
-                  </Link>
+
+                    {/* Members Avatars */}
+                    <div className="flex items-center -space-x-2 pt-2">
+                      {displayMembers.map((mem, idx) => (
+                        <div 
+                          key={mem._id || idx} 
+                          className="w-9 h-9 rounded-full border-2 border-white bg-gray-100 flex items-center justify-center text-[11px] font-bold text-gray-600 dark:border-[#111113] dark:bg-white/5 dark:text-white overflow-hidden shadow-sm"
+                          title={mem.name}
+                        >
+                          {mem.avatar ? (
+                            <img src={mem.avatar} alt="avatar" className="w-full h-full object-cover" />
+                          ) : (
+                            <span>{mem.name?.[0]?.toUpperCase()}</span>
+                          )}
+                        </div>
+                      ))}
+                      {extraMembersCount > 0 && (
+                        <div className="w-9 h-9 rounded-full border-2 border-white bg-gray-50 flex items-center justify-center text-[10px] font-bold text-gray-400 dark:border-[#111113] dark:bg-white/5 shadow-sm">
+                          +{extraMembersCount}
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 </motion.div>
               );
             })
@@ -204,6 +252,7 @@ function ProjectList() {
             </div>
           )}
         </AnimatePresence>
+        </div>
       </main>
     </div>
   );
