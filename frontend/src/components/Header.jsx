@@ -43,7 +43,7 @@ function Header({ title }) {
 
   return (
     <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12 relative">
-      <h1 className="text-3xl font-bold text-white shrink-0 w-48">{title}</h1>
+      <h1 className="text-3xl font-bold text-gray-900 shrink-0 w-48 dark:text-white transition-colors duration-300">{title}</h1>
 
       <div className="flex-1 max-w-xl w-full">
         <div className="relative">
@@ -55,7 +55,7 @@ function Header({ title }) {
           <input
             type="text"
             placeholder="Search here..."
-            className="w-full bg-[#111113] border border-white/5 rounded-full py-3 pl-12 pr-4 text-white placeholder:text-gray-500 focus:outline-none focus:border-[#ff5c00]/50 transition-all"
+            className="w-full bg-white border border-gray-200 rounded-full py-3 pl-12 pr-4 text-gray-900 placeholder:text-gray-500 focus:outline-none focus:border-[#ff5c00]/50 transition-all dark:bg-[#111113] dark:border-white/5 dark:text-white"
           />
         </div>
       </div>
@@ -65,14 +65,16 @@ function Header({ title }) {
         <button 
           onClick={() => setShowDropdown(!showDropdown)}
           className={`relative w-12 h-12 rounded-full border flex items-center justify-center transition-all ${
-            showDropdown ? 'border-[#ff5c00]/50 text-[#ff5c00] bg-[#ff5c00]/10' : 'border-white/10 text-gray-400 hover:text-white hover:border-white/20 bg-[#111113]'
+            showDropdown 
+            ? 'border-[#ff5c00]/50 text-[#ff5c00] bg-[#ff5c00]/10' 
+            : 'border-gray-200 text-gray-400 hover:text-gray-900 hover:border-gray-300 bg-white dark:border-white/10 dark:text-gray-400 dark:hover:text-white dark:hover:border-white/20 dark:bg-[#111113]'
           }`}
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
           </svg>
           {unreadCount > 0 && (
-            <span className="absolute top-2 right-2 w-2.5 h-2.5 rounded-full bg-[#ff5c00] border-2 border-[#111113]"></span>
+            <span className="absolute top-2 right-2 w-2.5 h-2.5 rounded-full bg-[#ff5c00] border-2 border-white dark:border-[#111113]"></span>
           )}
         </button>
 
@@ -84,10 +86,10 @@ function Header({ title }) {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 10, scale: 0.95 }}
               transition={{ duration: 0.2 }}
-              className="absolute top-16 right-[100px] sm:right-0 w-80 bg-[#111113] border border-white/10 rounded-2xl shadow-2xl z-50 overflow-hidden"
+              className="absolute top-16 right-[100px] sm:right-0 w-80 bg-white border border-gray-200 rounded-2xl shadow-2xl z-50 overflow-hidden dark:bg-[#111113] dark:border-white/10"
             >
-              <div className="p-4 border-b border-white/5 bg-white/5 flex justify-between items-center">
-                <h3 className="text-white font-bold">Notifications</h3>
+              <div className="p-4 border-b border-gray-100 bg-gray-50 flex justify-between items-center dark:border-white/5 dark:bg-white/5">
+                <h3 className="text-gray-900 font-bold dark:text-white">Notifications</h3>
                 {unreadCount > 0 && (
                   <span className="bg-[#ff5c00]/20 text-[#ff5c00] text-[10px] font-bold px-2 py-0.5 rounded-full">
                     {unreadCount} NEW
@@ -102,9 +104,9 @@ function Header({ title }) {
                     <div 
                       key={notif._id} 
                       onClick={() => !notif.read && markAsRead(notif._id)}
-                      className={`p-4 border-b border-white/5 cursor-pointer transition-all hover:bg-white/5 ${notif.read ? 'opacity-60' : 'bg-[#ff5c00]/5'}`}
+                      className={`p-4 border-b border-gray-100 cursor-pointer transition-all hover:bg-gray-50 dark:border-white/5 dark:hover:bg-white/5 ${notif.read ? 'opacity-60' : 'bg-[#ff5c00]/5'}`}
                     >
-                      <p className={`text-sm mb-1 ${notif.read ? 'text-gray-400' : 'text-white font-bold'}`}>
+                      <p className={`text-sm mb-1 ${notif.read ? 'text-gray-500' : 'text-gray-900 font-bold dark:text-white'}`}>
                         {notif.message}
                       </p>
                       <div className="flex justify-between items-center">
@@ -121,7 +123,7 @@ function Header({ title }) {
 
         <div className="flex items-center gap-3">
           <div className="text-right hidden sm:block">
-            <p className="text-sm font-bold text-white">{user?.name}</p>
+            <p className="text-sm font-bold text-gray-900 dark:text-white">{user?.name}</p>
             <p className="text-xs text-gray-500">{user?.role === 'Admin' ? 'Super Admin' : 'Member'}</p>
           </div>
           <div className="w-12 h-12 rounded-full bg-[#ff5c00] flex items-center justify-center font-bold text-white text-lg shadow-[0_0_15px_rgba(255,92,0,0.3)] border border-[#ff5c00]/50">

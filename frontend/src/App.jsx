@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider, useAuth } from './context/AuthContext'
+import { ThemeProvider } from './context/ThemeContext'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
@@ -19,65 +20,67 @@ function PrivateRoute({ children }) {
 
 function App() {
   return (
-    <AuthProvider>
-      <Router>
-        <div className="min-h-screen bg-[#0b0b0b] text-white font-sans selection:bg-[#ff5c00]/30">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route 
-              path="/dashboard" 
-              element={
-                <PrivateRoute>
-                  <Dashboard />
-                </PrivateRoute>
-              } 
-            />
-            <Route 
-              path="/projects" 
-              element={
-                <PrivateRoute>
-                  <ProjectList />
-                </PrivateRoute>
-              } 
-            />
-            <Route 
-              path="/projects/:id" 
-              element={
-                <PrivateRoute>
-                  <ProjectDetails />
-                </PrivateRoute>
-              } 
-            />
-            <Route 
-              path="/team" 
-              element={
-                <PrivateRoute>
-                  <Team />
-                </PrivateRoute>
-              } 
-            />
-            <Route 
-              path="/messages" 
-              element={
-                <PrivateRoute>
-                  <Messages />
-                </PrivateRoute>
-              } 
-            />
-            <Route 
-              path="/settings" 
-              element={
-                <PrivateRoute>
-                  <Settings />
-                </PrivateRoute>
-              } 
-            />
-          </Routes>
-        </div>
-      </Router>
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <Router>
+          <div className="min-h-screen bg-gray-50 text-gray-900 font-sans selection:bg-[#ff5c00]/30 dark:bg-[#0b0b0b] dark:text-white transition-colors duration-300">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route 
+                path="/dashboard" 
+                element={
+                  <PrivateRoute>
+                    <Dashboard />
+                  </PrivateRoute>
+                } 
+              />
+              <Route 
+                path="/projects" 
+                element={
+                  <PrivateRoute>
+                    <ProjectList />
+                  </PrivateRoute>
+                } 
+              />
+              <Route 
+                path="/projects/:id" 
+                element={
+                  <PrivateRoute>
+                    <ProjectDetails />
+                  </PrivateRoute>
+                } 
+              />
+              <Route 
+                path="/team" 
+                element={
+                  <PrivateRoute>
+                    <Team />
+                  </PrivateRoute>
+                } 
+              />
+              <Route 
+                path="/messages" 
+                element={
+                  <PrivateRoute>
+                    <Messages />
+                  </PrivateRoute>
+                } 
+              />
+              <Route 
+                path="/settings" 
+                element={
+                  <PrivateRoute>
+                    <Settings />
+                  </PrivateRoute>
+                } 
+              />
+            </Routes>
+          </div>
+        </Router>
+      </AuthProvider>
+    </ThemeProvider>
   )
 }
 

@@ -62,7 +62,7 @@ function Dashboard() {
   };
 
   return (
-    <div className="h-screen bg-[#0b0b0b] flex overflow-hidden font-sans">
+    <div className="h-screen bg-gray-50 flex overflow-hidden font-sans dark:bg-[#0b0b0b] transition-colors duration-300">
       <Sidebar />
 
       {/* Main Content */}
@@ -77,10 +77,10 @@ function Dashboard() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1 }}
-              className="bg-[#111113] border border-white/5 p-6 rounded-3xl"
+              className="bg-white border border-gray-200 p-6 rounded-3xl dark:bg-[#111113] dark:border-white/5 shadow-sm dark:shadow-none"
             >
               <p className="text-gray-400 text-sm font-medium mb-4">{card.title}</p>
-              <p className="text-4xl font-bold text-white" style={{ color: card.color }}>
+              <p className="text-4xl font-bold text-gray-900 dark:text-white" style={{ color: card.color }}>
                 {card.value}
               </p>
             </motion.div>
@@ -93,9 +93,9 @@ function Dashboard() {
           <motion.div 
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-[#111113] border border-white/5 p-8 rounded-3xl min-h-[400px]"
+            className="bg-white border border-gray-200 p-8 rounded-3xl min-h-[400px] dark:bg-[#111113] dark:border-white/5 shadow-sm dark:shadow-none"
           >
-            <h3 className="text-xl font-bold text-white mb-6">Task Status Distribution</h3>
+            <h3 className="text-xl font-bold text-gray-900 mb-6 dark:text-white">Task Status Distribution</h3>
             <div className="h-[300px] w-full">
               {stats.taskStatusDistribution?.length > 0 ? (
                 <ResponsiveContainer width="100%" height="100%">
@@ -131,9 +131,9 @@ function Dashboard() {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2 }}
-            className="bg-[#111113] border border-white/5 p-8 rounded-3xl min-h-[400px]"
+            className="bg-white border border-gray-200 p-8 rounded-3xl min-h-[400px] dark:bg-[#111113] dark:border-white/5 shadow-sm dark:shadow-none"
           >
-            <h3 className="text-xl font-bold text-white mb-6">Priority Breakdown</h3>
+            <h3 className="text-xl font-bold text-gray-900 mb-6 dark:text-white">Priority Breakdown</h3>
             <div className="h-[300px] w-full">
               {stats.priorityDistribution?.length > 0 ? (
                 <ResponsiveContainer width="100%" height="100%">
@@ -173,12 +173,12 @@ function Dashboard() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Action Area */}
-          <div className="bg-[#111113] border border-white/5 rounded-3xl p-8 text-center flex flex-col justify-center">
-            <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center mx-auto mb-6">
+          <div className="bg-white border border-gray-200 rounded-3xl p-8 text-center flex flex-col justify-center dark:bg-[#111113] dark:border-white/5 shadow-sm dark:shadow-none">
+            <div className="w-16 h-16 bg-[#ff5c00]/5 rounded-2xl flex items-center justify-center mx-auto mb-6">
               <span className="text-[#ff5c00] text-2xl">📋</span>
             </div>
-            <h2 className="text-xl font-bold text-white mb-2">Go to Projects</h2>
-            <p className="text-gray-400 mb-8 max-w-sm mx-auto">
+            <h2 className="text-xl font-bold text-gray-900 mb-2 dark:text-white">Go to Projects</h2>
+            <p className="text-gray-500 mb-8 max-w-sm mx-auto dark:text-gray-400">
               View all your projects, assign tasks, and track progress.
             </p>
             <div>
@@ -192,8 +192,8 @@ function Dashboard() {
           </div>
 
           {/* Notifications Feed */}
-          <div className="bg-[#111113] border border-white/5 rounded-3xl p-8 flex flex-col max-h-[400px]">
-            <h3 className="text-xl font-bold text-white mb-6">Recent Notifications</h3>
+          <div className="bg-white border border-gray-200 rounded-3xl p-8 flex flex-col max-h-[400px] dark:bg-[#111113] dark:border-white/5 shadow-sm dark:shadow-none">
+            <h3 className="text-xl font-bold text-gray-900 mb-6 dark:text-white">Recent Notifications</h3>
             <div className="flex-1 overflow-y-auto space-y-4 pr-2">
               {notifications.length === 0 ? (
                 <p className="text-sm text-gray-500 text-center mt-10">No new notifications</p>
@@ -203,9 +203,9 @@ function Dashboard() {
                     key={notif._id}
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    className={`p-4 rounded-2xl border ${notif.read ? 'bg-white/5 border-transparent' : 'bg-[#ff5c00]/10 border-[#ff5c00]/20'}`}
+                    className={`p-4 rounded-2xl border ${notif.read ? 'bg-gray-50 border-transparent dark:bg-white/5' : 'bg-[#ff5c00]/5 border-[#ff5c00]/10 dark:bg-[#ff5c00]/10 dark:border-[#ff5c00]/20'}`}
                   >
-                    <p className="text-sm text-gray-300 mb-2">{notif.message}</p>
+                    <p className={`text-sm mb-2 ${notif.read ? 'text-gray-500' : 'text-gray-900 font-bold dark:text-gray-300 dark:font-normal'}`}>{notif.message}</p>
                     <div className="flex justify-between items-center mt-3">
                       <span className="text-xs text-gray-500">
                         {new Date(notif.createdAt).toLocaleDateString()}

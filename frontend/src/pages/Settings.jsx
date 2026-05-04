@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 import axios from 'axios';
 import { motion } from 'framer-motion';
 import Sidebar from '../components/Sidebar';
@@ -7,6 +8,7 @@ import Header from '../components/Header';
 
 function Settings() {
   const { user, updateUser } = useAuth();
+  const { theme, setTheme } = useTheme();
   
   // Profile State
   const [profileData, setProfileData] = useState({
@@ -65,7 +67,7 @@ function Settings() {
   };
 
   return (
-    <div className="h-screen bg-[#0b0b0b] flex overflow-hidden">
+    <div className="h-screen bg-gray-50 flex overflow-hidden dark:bg-[#0b0b0b] transition-colors duration-300">
       <Sidebar />
 
       <main className="flex-1 p-8 lg:p-12 overflow-y-auto">
@@ -77,9 +79,9 @@ function Settings() {
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-[#111113] border border-white/5 rounded-3xl p-8"
+            className="bg-white border border-gray-200 rounded-3xl p-8 dark:bg-[#111113] dark:border-white/5 shadow-sm dark:shadow-none"
           >
-            <h2 className="text-xl font-bold text-white mb-6">Profile Information</h2>
+            <h2 className="text-xl font-bold text-gray-900 mb-6 dark:text-white">Profile Information</h2>
             
             <div className="flex flex-col md:flex-row gap-8 mb-8">
               <div className="flex flex-col items-center gap-4">
@@ -87,7 +89,7 @@ function Settings() {
                   {user?.name?.[0]?.toUpperCase()}
                 </div>
                 <div className="text-center">
-                  <span className="bg-white/10 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+                  <span className="bg-gray-100 text-gray-700 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider dark:bg-white/10 dark:text-white">
                     {user?.role}
                   </span>
                 </div>
@@ -101,22 +103,22 @@ function Settings() {
                 )}
                 
                 <div>
-                  <label className="block text-gray-400 text-sm font-bold mb-2">Full Name</label>
+                  <label className="block text-gray-500 text-sm font-bold mb-2 dark:text-gray-400">Full Name</label>
                   <input
                     type="text"
                     value={profileData.name}
                     onChange={(e) => setProfileData({...profileData, name: e.target.value})}
-                    className="w-full bg-[#1a1a1c] border border-white/5 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#ff5c00]/50 transition-all"
+                    className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:border-[#ff5c00]/50 transition-all dark:bg-[#1a1a1c] dark:border-white/5 dark:text-white"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-gray-400 text-sm font-bold mb-2">Email Address</label>
+                  <label className="block text-gray-500 text-sm font-bold mb-2 dark:text-gray-400">Email Address</label>
                   <input
                     type="email"
                     value={profileData.email}
                     onChange={(e) => setProfileData({...profileData, email: e.target.value})}
-                    className="w-full bg-[#1a1a1c] border border-white/5 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#ff5c00]/50 transition-all"
+                    className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:border-[#ff5c00]/50 transition-all dark:bg-[#1a1a1c] dark:border-white/5 dark:text-white"
                     required
                   />
                 </div>
@@ -138,9 +140,9 @@ function Settings() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-[#111113] border border-white/5 rounded-3xl p-8"
+            className="bg-white border border-gray-200 rounded-3xl p-8 dark:bg-[#111113] dark:border-white/5 shadow-sm dark:shadow-none"
           >
-            <h2 className="text-xl font-bold text-white mb-6">Account Security</h2>
+            <h2 className="text-xl font-bold text-gray-900 mb-6 dark:text-white">Account Security</h2>
             
             <form onSubmit={handlePasswordUpdate} className="space-y-4 max-w-2xl">
               {passwordMsg.text && (
@@ -150,34 +152,34 @@ function Settings() {
               )}
 
               <div>
-                <label className="block text-gray-400 text-sm font-bold mb-2">Current Password</label>
+                <label className="block text-gray-500 text-sm font-bold mb-2 dark:text-gray-400">Current Password</label>
                 <input
                   type="password"
                   value={passwordData.currentPassword}
                   onChange={(e) => setPasswordData({...passwordData, currentPassword: e.target.value})}
-                  className="w-full bg-[#1a1a1c] border border-white/5 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#ff5c00]/50 transition-all"
+                  className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:border-[#ff5c00]/50 transition-all dark:bg-[#1a1a1c] dark:border-white/5 dark:text-white"
                   required
                 />
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-gray-400 text-sm font-bold mb-2">New Password</label>
+                  <label className="block text-gray-500 text-sm font-bold mb-2 dark:text-gray-400">New Password</label>
                   <input
                     type="password"
                     value={passwordData.newPassword}
                     onChange={(e) => setPasswordData({...passwordData, newPassword: e.target.value})}
-                    className="w-full bg-[#1a1a1c] border border-white/5 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#ff5c00]/50 transition-all"
+                    className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:border-[#ff5c00]/50 transition-all dark:bg-[#1a1a1c] dark:border-white/5 dark:text-white"
                     required
                     minLength="6"
                   />
                 </div>
                 <div>
-                  <label className="block text-gray-400 text-sm font-bold mb-2">Confirm New Password</label>
+                  <label className="block text-gray-500 text-sm font-bold mb-2 dark:text-gray-400">Confirm New Password</label>
                   <input
                     type="password"
                     value={passwordData.confirmPassword}
                     onChange={(e) => setPasswordData({...passwordData, confirmPassword: e.target.value})}
-                    className="w-full bg-[#1a1a1c] border border-white/5 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#ff5c00]/50 transition-all"
+                    className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:border-[#ff5c00]/50 transition-all dark:bg-[#1a1a1c] dark:border-white/5 dark:text-white"
                     required
                     minLength="6"
                   />
@@ -187,12 +189,47 @@ function Settings() {
                 <button 
                   type="submit"
                   disabled={isSavingPassword || !passwordData.currentPassword || !passwordData.newPassword}
-                  className="bg-white/10 hover:bg-white/20 text-white font-bold py-3 px-8 rounded-xl transition-all active:scale-95 border border-white/10 disabled:opacity-50 disabled:active:scale-100"
+                  className="bg-gray-100 hover:bg-gray-200 text-gray-900 font-bold py-3 px-8 rounded-xl transition-all active:scale-95 border border-gray-200 disabled:opacity-50 disabled:active:scale-100 dark:bg-white/10 dark:hover:bg-white/20 dark:text-white dark:border-white/10"
                 >
                   {isSavingPassword ? 'Updating...' : 'Update Password'}
                 </button>
               </div>
             </form>
+          </motion.div>
+
+          {/* Appearance Card */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="bg-white border border-gray-200 rounded-3xl p-8 dark:bg-[#111113] dark:border-white/5 shadow-sm dark:shadow-none"
+          >
+            <h2 className="text-xl font-bold text-gray-900 mb-6 dark:text-white">Appearance</h2>
+            <div className="space-y-6">
+              <p className="text-gray-500 text-sm dark:text-gray-400">Choose how Planify looks to you. Select a theme that fits your preference.</p>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <button
+                  onClick={() => setTheme('dark')}
+                  className={`flex flex-col gap-3 p-4 rounded-2xl border transition-all ${theme === 'dark' ? 'bg-[#ff5c00]/10 border-[#ff5c00]' : 'bg-gray-50 border-gray-200 hover:border-gray-300 dark:bg-[#1a1a1c] dark:border-white/5 dark:hover:border-white/10'}`}
+                >
+                  <div className="h-24 w-full bg-[#0b0b0b] rounded-xl border border-white/10 flex items-center justify-center">
+                    <div className="w-12 h-2 bg-white/20 rounded-full"></div>
+                  </div>
+                  <span className={`text-sm font-bold ${theme === 'dark' ? 'text-[#ff5c00]' : 'text-gray-500'}`}>Dark Mode</span>
+                </button>
+
+                <button
+                  onClick={() => setTheme('light')}
+                  className={`flex flex-col gap-3 p-4 rounded-2xl border transition-all ${theme === 'light' ? 'bg-[#ff5c00]/10 border-[#ff5c00]' : 'bg-gray-50 border-gray-200 hover:border-gray-300 dark:bg-[#1a1a1c] dark:border-white/5 dark:hover:border-white/10'}`}
+                >
+                  <div className="h-24 w-full bg-white rounded-xl border border-black/10 flex items-center justify-center">
+                    <div className="w-12 h-2 bg-black/20 rounded-full"></div>
+                  </div>
+                  <span className={`text-sm font-bold ${theme === 'light' ? 'text-[#ff5c00]' : 'text-gray-500'}`}>Light Mode</span>
+                </button>
+              </div>
+            </div>
           </motion.div>
 
         </div>

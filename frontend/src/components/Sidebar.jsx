@@ -21,12 +21,12 @@ function Sidebar() {
   }
 
   return (
-    <aside className="w-72 bg-[#0b0b0b] border-r border-white/5 p-6 flex flex-col hidden lg:flex shrink-0">
+    <aside className="w-72 bg-white border-r border-gray-200 p-6 flex flex-col hidden lg:flex shrink-0 dark:bg-[#0b0b0b] dark:border-white/5 transition-colors duration-300">
       <div className="flex items-center gap-3 mb-12 px-2">
         <div className="w-10 h-10 bg-[#ff5c00]/10 rounded-xl flex items-center justify-center">
           <span className="text-[#ff5c00] text-xl font-bold">✳</span>
         </div>
-        <span className="text-white text-2xl font-bold tracking-tight">Planify</span>
+        <span className="text-gray-900 text-2xl font-bold tracking-tight dark:text-white">Planify</span>
       </div>
 
       <div className="mb-8 px-2">
@@ -40,7 +40,7 @@ function Sidebar() {
                 to={item.path}
                 className={`flex items-center gap-3 px-4 py-3.5 rounded-2xl transition-all font-medium ${isActive
                     ? 'bg-[#ff5c00]/10 text-[#ff5c00] shadow-[0_0_15px_rgba(255,92,0,0.05)]'
-                    : 'text-gray-400 hover:bg-white/5 hover:text-white'
+                    : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white'
                   }`}
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -54,19 +54,19 @@ function Sidebar() {
       </div>
 
       <div className="mt-auto">
-        <div className="p-4 bg-[#111113] border border-white/5 rounded-2xl mb-4 flex items-center gap-3">
+        <div className="p-4 bg-gray-50 border border-gray-200 rounded-2xl mb-4 flex items-center gap-3 dark:bg-[#111113] dark:border-white/5">
           <div className="w-10 h-10 rounded-full bg-[#ff5c00] flex items-center justify-center font-bold text-white shadow-[0_0_15px_rgba(255,92,0,0.3)]">
             {user?.name?.[0]}
           </div>
           <div className="flex-1 overflow-hidden">
-            <p className="text-sm font-bold text-white truncate">{user?.name}</p>
+            <p className="text-sm font-bold text-gray-900 truncate dark:text-white">{user?.name}</p>
             <p className="text-xs text-gray-500 truncate capitalize">{user?.role}</p>
           </div>
         </div>
 
         <button
           onClick={logout}
-          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-red-500/10 text-gray-400 hover:text-red-500 transition-all font-medium"
+          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-red-500/10 text-gray-500 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-500 transition-all font-medium"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
