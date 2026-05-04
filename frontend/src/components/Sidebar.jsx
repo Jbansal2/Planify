@@ -84,10 +84,10 @@ function Sidebar() {
   return (
     <>
       {/* Mobile Header Toggle */}
-      <div className="lg:hidden fixed top-4 left-4 z-[60]">
+      <div className="lg:hidden fixed top-6 right-6 z-[60]">
         <button 
           onClick={() => setIsMobileOpen(true)}
-          className="p-3 bg-white border border-gray-200 rounded-xl text-gray-600 shadow-sm dark:bg-[#111113] dark:border-white/10 dark:text-gray-400"
+          className="p-3 bg-white border border-gray-200 rounded-xl text-gray-600 shadow-lg dark:bg-[#111113] dark:border-white/10 dark:text-gray-400 backdrop-blur-md"
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7" />
