@@ -12,7 +12,7 @@ function ProjectDetails() {
   const { user } = useAuth();
   const [tasks, setTasks] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [newTask, setNewTask] = useState({ title: '', description: '', status: 'Todo', dueDate: '' });
+  const [newTask, setNewTask] = useState({ title: '', description: '', status: 'Todo', priority: 'Medium', dueDate: '' });
   const [isLoading, setIsLoading] = useState(false);
 
   const [users, setUsers] = useState([]);
@@ -48,7 +48,7 @@ function ProjectDetails() {
     try {
       await axios.post('https://backend-production-b33cd.up.railway.app/api/tasks', { ...newTask, project: id });
       setShowModal(false);
-      setNewTask({ title: '', description: '', status: 'Todo', assignee: '', dueDate: '' });
+      setNewTask({ title: '', description: '', status: 'Todo', priority: 'Medium', assignee: '', dueDate: '' });
       fetchTasks();
     } catch (err) {
       alert('Failed to create task');
@@ -67,6 +67,15 @@ function ProjectDetails() {
   };
 
   const columns = ['Todo', 'In Progress', 'Done'];
+
+  const getPriorityColor = (priority) => {
+    switch (priority) {
+      case 'High': return 'bg-red-500/10 text-red-500';
+      case 'Medium': return 'bg-amber-500/10 text-amber-500';
+      case 'Low': return 'bg-emerald-500/10 text-emerald-500';
+      default: return 'bg-gray-500/10 text-gray-500';
+    }
+  };
 
   return (
     <div className="h-screen bg-gray-50 flex overflow-hidden dark:bg-[#0b0b0b] transition-colors duration-300">
@@ -111,8 +120,13 @@ function ProjectDetails() {
                   layout
                   className="bg-white border border-gray-100 p-5 rounded-2xl group relative shadow-sm dark:bg-[#111113] dark:border-white/5 dark:shadow-none"
                 >
-                  <h4 className="text-gray-900 font-bold mb-2 dark:text-white">{task.title}</h4>
-                  <p className="text-gray-500 text-sm mb-4">{task.description}</p>
+                  <div className="flex justify-between items-start mb-2">
+                    <h4 className="text-gray-900 font-bold dark:text-white">{task.title}</h4>
+                    <span className={`text-[10px] font-bold px-2 py-1 rounded-md uppercase tracking-wider ${getPriorityColor(task.priority)}`}>
+                      {task.priority}
+                    </span>
+                  </div>
+                  <p className="text-gray-500 text-sm mb-4 line-clamp-2">{task.description}</p>
                   
                   {task.assignee && task.assignee.name && (
                     <div className="flex items-center gap-2 mb-3">
@@ -166,7 +180,7 @@ function ProjectDetails() {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
-              className="relative bg-white border border-gray-200 w-full max-w-md p-8 rounded-3xl shadow-2xl dark:bg-[#111113] dark:border-white/10"
+              className="relative bg-white border border-gray-200 w-full max-w-md p-8 rounded-[2.5rem] shadow-2xl dark:bg-[#111113] dark:border-white/10"
             >
               <h2 className="text-2xl font-bold text-gray-900 mb-6 dark:text-white">Create New Task</h2>
               <form onSubmit={handleCreateTask} className="space-y-4">
@@ -188,6 +202,16 @@ function ProjectDetails() {
                 
                 <div className="grid grid-cols-2 gap-4">
                   <select
+                    value={newTask.priority}
+                    onChange={(e) => setNewTask({...newTask, priority: e.target.value})}
+                    className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-6 py-4 text-gray-900 focus:outline-none focus:border-[#ff5c00]/50 transition-all appearance-none dark:bg-white/5 dark:border-white/10 dark:text-white"
+                  >
+                    <option value="Low" className="bg-white text-gray-900 dark:bg-[#111113] dark:text-white">Low Priority</option>
+                    <option value="Medium" className="bg-white text-gray-900 dark:bg-[#111113] dark:text-white">Medium Priority</option>
+                    <option value="High" className="bg-white text-gray-900 dark:bg-[#111113] dark:text-white">High Priority</option>
+                  </select>
+
+                  <select
                     value={newTask.assignee || ''}
                     onChange={(e) => setNewTask({...newTask, assignee: e.target.value})}
                     className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-6 py-4 text-gray-900 focus:outline-none focus:border-[#ff5c00]/50 transition-all appearance-none dark:bg-white/5 dark:border-white/10 dark:text-white"
@@ -199,14 +223,14 @@ function ProjectDetails() {
                       </option>
                     ))}
                   </select>
-
-                  <input
-                    type="date"
-                    value={newTask.dueDate}
-                    onChange={(e) => setNewTask({...newTask, dueDate: e.target.value})}
-                    className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-6 py-4 text-gray-900 focus:outline-none focus:border-[#ff5c00]/50 transition-all appearance-none [color-scheme:light] dark:[color-scheme:dark] dark:bg-white/5 dark:border-white/10 dark:text-white"
-                  />
                 </div>
+
+                <input
+                  type="date"
+                  value={newTask.dueDate}
+                  onChange={(e) => setNewTask({...newTask, dueDate: e.target.value})}
+                  className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-6 py-4 text-gray-900 focus:outline-none focus:border-[#ff5c00]/50 transition-all appearance-none [color-scheme:light] dark:[color-scheme:dark] dark:bg-white/5 dark:border-white/10 dark:text-white"
+                />
 
                 <button 
                   type="submit"
