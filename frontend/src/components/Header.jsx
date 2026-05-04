@@ -86,7 +86,7 @@ function Header({ title }) {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 10, scale: 0.95 }}
               transition={{ duration: 0.2 }}
-              className="absolute top-16 right-[100px] sm:right-0 w-80 bg-white border border-gray-200 rounded-2xl shadow-2xl z-50 overflow-hidden dark:bg-[#111113] dark:border-white/10"
+              className="absolute top-16 right-0 w-[calc(100vw-2rem)] sm:w-80 bg-white border border-gray-200 rounded-2xl shadow-2xl z-50 overflow-hidden dark:bg-[#111113] dark:border-white/10 transition-colors duration-300"
             >
               <div className="p-4 border-b border-gray-100 bg-gray-50 flex justify-between items-center dark:border-white/5 dark:bg-white/5">
                 <h3 className="text-gray-900 font-bold dark:text-white">Notifications</h3>
