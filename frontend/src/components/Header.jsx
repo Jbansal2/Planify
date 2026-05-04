@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
-import axios from 'axios';
+import axios from '../api/axios';
 import { motion, AnimatePresence } from 'framer-motion';
 
 function Header({ title }) {
@@ -23,7 +23,7 @@ function Header({ title }) {
 
   const fetchNotifications = async () => {
     try {
-      const res = await axios.get('https://backend-production-b33cd.up.railway.app/api/dashboard/notifications');
+      const res = await axios.get('/api/dashboard/notifications');
       setNotifications(res.data);
     } catch (err) {
       console.error('Failed to fetch notifications');
@@ -32,7 +32,7 @@ function Header({ title }) {
 
   const markAsRead = async (id) => {
     try {
-      await axios.patch(`https://backend-production-b33cd.up.railway.app/api/dashboard/notifications/${id}/read`);
+      await axios.patch(`/api/dashboard/notifications/${id}/read`);
       setNotifications(notifications.map(n => n._id === id ? { ...n, read: true } : n));
     } catch (err) {
       console.error('Failed to mark notification read');
