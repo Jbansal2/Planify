@@ -41,16 +41,16 @@ function Team() {
   };
 
   return (
-    <div className="h-screen bg-[#0b0b0b] flex overflow-hidden">
+    <div className="h-screen bg-gray-50 flex overflow-hidden dark:bg-[#0b0b0b] transition-colors duration-300">
       <Sidebar />
 
       <main className="flex-1 p-8 lg:p-12 overflow-y-auto">
         <Header title="Team Members" />
 
-        <div className="flex justify-between items-center mb-8 border-b border-white/5 pb-4">
+        <div className="flex justify-between items-center mb-8 border-b border-gray-100 pb-4 dark:border-white/5">
           <div className="flex items-center gap-3">
             <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">Workspace</span>
-            <span className="text-sm font-bold text-white bg-white/10 px-3 py-1 rounded-full">{users.length} MEMBERS</span>
+            <span className="text-sm font-bold text-gray-700 bg-gray-200 px-3 py-1 rounded-full dark:text-white dark:bg-white/10">{users.length} MEMBERS</span>
           </div>
         </div>
 
@@ -72,19 +72,19 @@ function Team() {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.05 }}
-                    className={`flex flex-col xl:flex-row items-center justify-between p-6 bg-[#111113] border transition-all rounded-2xl group ${
-                      isBlocked ? 'border-red-500/20 opacity-75' : 'border-white/5 hover:border-white/10'
+                    className={`flex flex-col xl:flex-row items-center justify-between p-6 bg-white border transition-all rounded-2xl group shadow-sm dark:bg-[#111113] dark:shadow-none ${
+                      isBlocked ? 'border-red-500/20 opacity-75' : 'border-gray-100 hover:border-gray-200 dark:border-white/5 dark:hover:border-white/10'
                     }`}
                   >
                     {/* User Info */}
                     <div className="flex items-center gap-4 w-full xl:w-2/5 mb-4 xl:mb-0">
                       <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl uppercase shrink-0 transition-colors ${
-                        isBlocked ? 'bg-red-500/20 text-red-500' : 'bg-[#2a2a2c] text-white group-hover:bg-[#ff5c00] group-hover:text-white'
+                        isBlocked ? 'bg-red-500/20 text-red-500' : 'bg-gray-100 text-gray-900 group-hover:bg-[#ff5c00] group-hover:text-white dark:bg-[#2a2a2c] dark:text-white'
                       }`}>
                         {member.name.charAt(0)}
                       </div>
                       <div>
-                        <h3 className="text-white font-bold text-lg leading-tight flex items-center gap-2">
+                        <h3 className="text-gray-900 font-bold text-lg leading-tight flex items-center gap-2 dark:text-white">
                           {member.name}
                           {member._id === user.id && (
                             <span className="text-[10px] bg-[#ff5c00]/20 text-[#ff5c00] px-2 py-0.5 rounded font-bold uppercase">You</span>
@@ -97,7 +97,7 @@ function Team() {
                     {/* Role */}
                     <div className="w-full xl:w-1/5 mb-4 xl:mb-0">
                       <span className={`text-xs px-3 py-1.5 rounded-lg font-bold uppercase tracking-wider inline-flex items-center gap-1.5 ${
-                        member.role === 'Admin' ? 'bg-[#ff5c00]/10 text-[#ff5c00]' : 'bg-white/5 text-gray-400'
+                        member.role === 'Admin' ? 'bg-[#ff5c00]/10 text-[#ff5c00]' : 'bg-gray-100 text-gray-500 dark:bg-white/5 dark:text-gray-400'
                       }`}>
                         {member.role === 'Admin' ? (
                           <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
@@ -125,14 +125,14 @@ function Team() {
                           onClick={() => toggleBlockStatus(member._id)}
                           className={`text-sm font-bold px-5 py-2 rounded-xl transition-all border ${
                             isBlocked 
-                              ? 'bg-white/5 text-white border-white/10 hover:bg-white/10' 
-                              : 'bg-transparent text-gray-400 border-white/5 hover:border-red-500/50 hover:text-red-500 hover:bg-red-500/10'
+                              ? 'bg-gray-100 text-gray-900 border-gray-200 hover:bg-gray-200 dark:bg-white/5 dark:text-white dark:border-white/10 dark:hover:bg-white/10' 
+                              : 'bg-transparent text-gray-500 border-gray-200 hover:border-red-500/50 hover:text-red-500 hover:bg-red-500/10 dark:text-gray-400 dark:border-white/5'
                           }`}
                         >
                           {isBlocked ? 'Unblock Member' : 'Block Access'}
                         </button>
                       ) : (
-                        <span className="text-gray-600 text-sm italic">Cannot block yourself</span>
+                        <span className="text-gray-400 text-sm italic dark:text-gray-600">Cannot block yourself</span>
                       )}
                     </div>
                   </motion.div>

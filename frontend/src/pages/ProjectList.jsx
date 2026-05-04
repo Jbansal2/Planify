@@ -54,22 +54,22 @@ function ProjectList() {
   const avatarColors = ['bg-blue-500', 'bg-green-500', 'bg-purple-500', 'bg-pink-500', 'bg-yellow-500'];
 
   return (
-    <div className="h-screen bg-[#0b0b0b] flex overflow-hidden">
+    <div className="h-screen bg-gray-50 flex overflow-hidden dark:bg-[#0b0b0b] transition-colors duration-300">
       <Sidebar />
 
       <main className="flex-1 p-8 lg:p-12 overflow-y-auto">
         <Header title="Projects" />
 
-        <div className="flex justify-between items-center mb-8 border-b border-white/5 pb-4">
+        <div className="flex justify-between items-center mb-8 border-b border-gray-100 pb-4 dark:border-white/5">
           <div className="flex items-center gap-3">
             <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">Active</span>
-            <span className="text-sm font-bold text-white bg-white/10 px-3 py-1 rounded-full">{projects.length} PROJECTS</span>
+            <span className="text-sm font-bold text-gray-700 bg-gray-200 px-3 py-1 rounded-full dark:text-white dark:bg-white/10">{projects.length} PROJECTS</span>
           </div>
 
           {user?.role === 'Admin' && (
             <button 
               onClick={() => setShowModal(true)}
-              className="flex items-center gap-2 bg-[#111113] hover:bg-white/5 border border-white/10 text-white font-bold px-6 py-2.5 rounded-xl transition-all"
+              className="flex items-center gap-2 bg-white border border-gray-200 hover:bg-gray-50 text-gray-900 font-bold px-6 py-2.5 rounded-xl transition-all shadow-sm dark:bg-[#111113] dark:hover:bg-white/5 dark:border-white/10 dark:text-white dark:shadow-none"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M12 4v16m8-8H4" />
@@ -98,34 +98,34 @@ function ProjectList() {
                 >
                   <Link 
                     to={`/projects/${project._id}`}
-                    className="flex flex-col xl:flex-row items-center justify-between p-6 bg-[#111113] border border-white/5 hover:border-white/10 rounded-2xl group transition-all"
+                    className="flex flex-col xl:flex-row items-center justify-between p-6 bg-white border border-gray-100 hover:border-gray-200 rounded-2xl group transition-all shadow-sm dark:bg-[#111113] dark:border-white/5 dark:hover:border-white/10 dark:shadow-none"
                   >
                     {/* Icon & Title */}
                     <div className="flex items-center gap-4 w-full xl:w-1/3 mb-4 xl:mb-0">
-                      <div className="w-12 h-12 rounded-xl bg-[#2a2a2c] text-white flex items-center justify-center text-xl font-bold group-hover:bg-[#ff5c00] group-hover:text-white transition-all">
+                      <div className="w-12 h-12 rounded-xl bg-gray-100 text-gray-900 flex items-center justify-center text-xl font-bold group-hover:bg-[#ff5c00] group-hover:text-white transition-all dark:bg-[#2a2a2c] dark:text-white">
                         {project.title.charAt(0).toUpperCase()}
                       </div>
                       <div>
-                        <h3 className="text-white font-bold text-lg leading-tight">{project.title}</h3>
+                        <h3 className="text-gray-900 font-bold text-lg leading-tight dark:text-white">{project.title}</h3>
                         <p className="text-gray-500 text-sm">Workspace</p>
                       </div>
                     </div>
 
                     {/* Tasks Counter */}
                     <div className="w-full xl:w-1/6 mb-4 xl:mb-0">
-                      <p className="text-white font-bold"><span className="text-[#ff5c00]">{project.completedTasks || 0}</span> / {project.totalTasks || 0}</p>
+                      <p className="text-gray-900 font-bold dark:text-white"><span className="text-[#ff5c00]">{project.completedTasks || 0}</span> / {project.totalTasks || 0}</p>
                       <p className="text-gray-500 text-sm">Tasks</p>
                     </div>
 
                     {/* Members/Owner Area (Replaces Budget in mockup) */}
                     <div className="w-full xl:w-1/6 mb-4 xl:mb-0">
-                      <p className="text-white font-bold">{allMembers.length} Members</p>
+                      <p className="text-gray-900 font-bold dark:text-white">{allMembers.length} Members</p>
                       <p className="text-gray-500 text-sm">Involved</p>
                     </div>
 
                     {/* Due Date */}
                     <div className="w-full xl:w-1/6 mb-4 xl:mb-0 flex justify-start xl:justify-center">
-                      <span className={`text-xs font-bold px-4 py-2 rounded-lg ${isOverdue ? 'bg-red-500/10 text-red-500' : 'bg-[#1a1a1c] text-gray-300'}`}>
+                      <span className={`text-xs font-bold px-4 py-2 rounded-lg ${isOverdue ? 'bg-red-500/10 text-red-500' : 'bg-gray-100 text-gray-700 dark:bg-[#1a1a1c] dark:text-gray-300'}`}>
                         {formatDueDate(project.dueDate)}
                       </span>
                     </div>
@@ -134,15 +134,15 @@ function ProjectList() {
                     <div className="w-full xl:w-1/6 flex justify-start xl:justify-end items-center">
                       <div className="flex -space-x-3">
                         {displayMembers.map((mem, idx) => (
-                          <div key={mem._id || idx} className={`w-8 h-8 rounded-full border-2 border-[#111113] flex items-center justify-center text-[10px] text-white font-bold ${idx === 0 ? 'bg-[#ff5c00]' : avatarColors[idx % avatarColors.length]} z-${30 - idx * 10}`}>
+                          <div key={mem._id || idx} className={`w-8 h-8 rounded-full border-2 border-white flex items-center justify-center text-[10px] text-white font-bold ${idx === 0 ? 'bg-[#ff5c00]' : avatarColors[idx % avatarColors.length]} z-${30 - idx * 10} dark:border-[#111113]`}>
                             {mem.name ? mem.name.charAt(0).toUpperCase() : 'U'}
                           </div>
                         ))}
-                        {extraMembersCount > 0 && (
-                          <div className="w-8 h-8 rounded-full border-2 border-[#111113] bg-[#2a2a2c] flex items-center justify-center text-[10px] text-white font-bold z-0">
+                        {extraMembersCount > 0 && (extraMembersCount > 0 && (
+                          <div className="w-8 h-8 rounded-full border-2 border-white bg-gray-200 flex items-center justify-center text-[10px] text-gray-900 font-bold z-0 dark:border-[#111113] dark:bg-[#2a2a2c] dark:text-white">
                             +{extraMembersCount}
                           </div>
-                        )}
+                        ))}
                       </div>
                     </div>
                   </Link>
@@ -161,15 +161,15 @@ function ProjectList() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={() => setShowModal(false)}
-                className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+                className="absolute inset-0 bg-black/60 backdrop-blur-sm"
               />
               <motion.div 
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
-                className="relative bg-[#111113] border border-white/10 w-full max-w-md p-8 rounded-3xl shadow-2xl"
+                className="relative bg-white border border-gray-200 w-full max-w-md p-8 rounded-3xl shadow-2xl dark:bg-[#111113] dark:border-white/10"
               >
-                <h2 className="text-2xl font-bold text-white mb-6">Create New Project</h2>
+                <h2 className="text-2xl font-bold text-gray-900 mb-6 dark:text-white">Create New Project</h2>
                 <form onSubmit={handleCreate} className="space-y-4">
                   <input
                     type="text"
@@ -177,25 +177,25 @@ function ProjectList() {
                     required
                     value={newProject.title}
                     onChange={(e) => setNewProject({...newProject, title: e.target.value})}
-                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white placeholder:text-gray-600 focus:outline-none focus:border-[#ff5c00]/50 transition-all"
+                    className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-6 py-4 text-gray-900 placeholder:text-gray-500 focus:outline-none focus:border-[#ff5c00]/50 transition-all dark:bg-white/5 dark:border-white/10 dark:text-white dark:placeholder:text-gray-600"
                   />
                   <textarea
                     placeholder="Project Description"
                     rows="3"
                     value={newProject.description}
                     onChange={(e) => setNewProject({...newProject, description: e.target.value})}
-                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white placeholder:text-gray-600 focus:outline-none focus:border-[#ff5c00]/50 transition-all resize-none"
+                    className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-6 py-4 text-gray-900 placeholder:text-gray-500 focus:outline-none focus:border-[#ff5c00]/50 transition-all resize-none dark:bg-white/5 dark:border-white/10 dark:text-white dark:placeholder:text-gray-600"
                   />
                   <input
                     type="date"
                     value={newProject.dueDate}
                     onChange={(e) => setNewProject({...newProject, dueDate: e.target.value})}
-                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-[#ff5c00]/50 transition-all [color-scheme:dark]"
+                    className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-6 py-4 text-gray-900 focus:outline-none focus:border-[#ff5c00]/50 transition-all dark:bg-white/5 dark:border-white/10 dark:text-white [color-scheme:light] dark:[color-scheme:dark]"
                   />
                   <button 
                     type="submit"
                     disabled={isLoading}
-                    className="w-full bg-[#ff5c00] text-white font-bold py-4 rounded-full transition-all hover:bg-[#e55200] disabled:opacity-50 mt-4"
+                    className="w-full bg-[#ff5c00] text-white font-bold py-4 rounded-full transition-all hover:bg-[#e55200] disabled:opacity-50 mt-4 shadow-lg shadow-[#ff5c00]/20"
                   >
                     {isLoading ? 'Creating...' : 'Create Project'}
                   </button>

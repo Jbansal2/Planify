@@ -14,7 +14,7 @@ import Settings from './pages/Settings'
 function PrivateRoute({ children }) {
   const { user, loading } = useAuth();
   
-  if (loading) return <div className="min-h-screen bg-[#0b0b0b] flex items-center justify-center text-[#ff5c00]">Loading...</div>;
+  if (loading) return <div className="min-h-screen bg-gray-50 flex items-center justify-center text-[#ff5c00] dark:bg-[#0b0b0b]">Loading...</div>;
   return user ? children : <Navigate to="/login" />;
 }
 

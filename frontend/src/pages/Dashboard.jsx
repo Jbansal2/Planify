@@ -5,6 +5,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
+import { useTheme } from '../context/ThemeContext';
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
   PieChart, Pie, Cell, Legend 
@@ -12,6 +13,7 @@ import {
 
 function Dashboard() {
   const { user } = useAuth();
+  const { theme } = useTheme();
   const [stats, setStats] = useState({
     totalProjects: 0,
     activeTasks: 0,
@@ -60,6 +62,8 @@ function Dashboard() {
     Medium: '#f59e0b',
     Low: '#22c55e'
   };
+
+  const isDark = theme === 'dark';
 
   return (
     <div className="h-screen bg-gray-50 flex overflow-hidden font-sans dark:bg-[#0b0b0b] transition-colors duration-300">
@@ -114,8 +118,13 @@ function Dashboard() {
                       ))}
                     </Pie>
                     <Tooltip 
-                      contentStyle={{ backgroundColor: '#111113', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '12px' }}
-                      itemStyle={{ color: '#fff' }}
+                      contentStyle={{ 
+                        backgroundColor: isDark ? '#111113' : '#fff', 
+                        borderColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)', 
+                        borderRadius: '12px',
+                        color: isDark ? '#fff' : '#000'
+                      }}
+                      itemStyle={{ color: isDark ? '#fff' : '#000' }}
                     />
                     <Legend verticalAlign="bottom" height={36}/>
                   </PieChart>
@@ -138,24 +147,28 @@ function Dashboard() {
               {stats.priorityDistribution?.length > 0 ? (
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={stats.priorityDistribution}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+                    <CartesianGrid strokeDasharray="3 3" stroke={isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)"} vertical={false} />
                     <XAxis 
                       dataKey="name" 
-                      stroke="#666" 
+                      stroke={isDark ? "#666" : "#999"} 
                       fontSize={12} 
                       tickLine={false} 
                       axisLine={false} 
                     />
                     <YAxis 
-                      stroke="#666" 
+                      stroke={isDark ? "#666" : "#999"} 
                       fontSize={12} 
                       tickLine={false} 
                       axisLine={false} 
                     />
                     <Tooltip 
-                      cursor={{fill: 'rgba(255,255,255,0.02)'}}
-                      contentStyle={{ backgroundColor: '#111113', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '12px' }}
-                      itemStyle={{ color: '#fff' }}
+                      cursor={{fill: isDark ? 'rgba(255,255,255,0.02)' : 'rgba(0,0,0,0.02)'}}
+                      contentStyle={{ 
+                        backgroundColor: isDark ? '#111113' : '#fff', 
+                        borderColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)', 
+                        borderRadius: '12px' 
+                      }}
+                      itemStyle={{ color: isDark ? '#fff' : '#000' }}
                     />
                     <Bar dataKey="value" radius={[6, 6, 0, 0]}>
                       {stats.priorityDistribution.map((entry, index) => (

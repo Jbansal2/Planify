@@ -29,19 +29,19 @@ function Signup() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0b0b0b] flex flex-col lg:flex-row overflow-hidden font-sans">
+    <div className="min-h-screen bg-white flex flex-col lg:flex-row overflow-hidden font-sans dark:bg-[#0b0b0b] transition-colors duration-300">
       {/* Left Side: Visual Asset */}
       <div className="hidden lg:block lg:w-1/2 relative">
         <img
           src={loginBg}
           alt="Architectural Backdrop"
-          className="absolute inset-0 w-full h-full object-cover"
+          className="absolute inset-0 w-full h-full object-cover grayscale"
         />
-        <div className="absolute inset-0 bg-black/40" />
+        <div className="absolute inset-0 bg-[#ff5c00]/10 dark:bg-black/40" />
       </div>
 
       {/* Right Side: Signup Form */}
-      <div className="flex-1 flex flex-col justify-between p-8 lg:p-16 xl:p-24 bg-[#0b0b0b] relative overflow-y-auto">
+      <div className="flex-1 flex flex-col justify-between p-8 lg:p-16 xl:p-24 bg-white relative overflow-y-auto dark:bg-[#0b0b0b]">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[#ff5c00]/5 blur-[120px] rounded-full pointer-events-none" />
 
         <div className="max-w-[440px] mx-auto w-full relative z-10">
@@ -52,10 +52,10 @@ function Signup() {
           >
             <Link to="/" className="inline-flex items-center gap-2 mb-8">
               <span className="text-[#ff5c00] text-3xl font-bold">✳</span>
-              <span className="text-white text-2xl font-bold tracking-tight">Planify</span>
+              <span className="text-gray-900 text-2xl font-bold tracking-tight dark:text-white">Planify</span>
             </Link>
 
-            <h1 className="text-[32px] font-bold text-white mb-8 tracking-tight">
+            <h1 className="text-[32px] font-bold text-gray-900 mb-8 tracking-tight dark:text-white">
               Create an account
             </h1>
 
@@ -73,7 +73,7 @@ function Signup() {
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Full name"
                   required
-                  className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white placeholder:text-gray-600 focus:outline-none focus:border-[#ff5c00]/50 transition-all text-[15px]"
+                  className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-6 py-4 text-gray-900 placeholder:text-gray-500 focus:outline-none focus:border-[#ff5c00]/50 transition-all text-[15px] dark:bg-white/5 dark:border-white/10 dark:text-white dark:placeholder:text-gray-600"
                 />
                 <input
                   type="email"
@@ -81,7 +81,7 @@ function Signup() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Email address"
                   required
-                  className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white placeholder:text-gray-600 focus:outline-none focus:border-[#ff5c00]/50 transition-all text-[15px]"
+                  className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-6 py-4 text-gray-900 placeholder:text-gray-500 focus:outline-none focus:border-[#ff5c00]/50 transition-all text-[15px] dark:bg-white/5 dark:border-white/10 dark:text-white dark:placeholder:text-gray-600"
                 />
                 <input
                   type="password"
@@ -89,7 +89,7 @@ function Signup() {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Password"
                   required
-                  className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white placeholder:text-gray-600 focus:outline-none focus:border-[#ff5c00]/50 transition-all text-[15px]"
+                  className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-6 py-4 text-gray-900 placeholder:text-gray-500 focus:outline-none focus:border-[#ff5c00]/50 transition-all text-[15px] dark:bg-white/5 dark:border-white/10 dark:text-white dark:placeholder:text-gray-600"
                 />
                 <div className="flex gap-4">
                   <label className="flex-1">
@@ -101,7 +101,7 @@ function Signup() {
                       onChange={(e) => setRole(e.target.value)}
                       className="hidden peer"
                     />
-                    <div className="p-4 bg-white/5 border border-white/10 rounded-2xl text-center text-sm font-medium text-gray-400 peer-checked:border-[#ff5c00] peer-checked:text-[#ff5c00] transition-all cursor-pointer">
+                    <div className="p-4 bg-gray-50 border border-gray-200 rounded-2xl text-center text-sm font-medium text-gray-500 peer-checked:border-[#ff5c00] peer-checked:text-[#ff5c00] transition-all cursor-pointer dark:bg-white/5 dark:border-white/10 dark:text-gray-400">
                       Member
                     </div>
                   </label>
@@ -114,7 +114,7 @@ function Signup() {
                       onChange={(e) => setRole(e.target.value)}
                       className="hidden peer"
                     />
-                    <div className="p-4 bg-white/5 border border-white/10 rounded-2xl text-center text-sm font-medium text-gray-400 peer-checked:border-[#ff5c00] peer-checked:text-[#ff5c00] transition-all cursor-pointer">
+                    <div className="p-4 bg-gray-50 border border-gray-200 rounded-2xl text-center text-sm font-medium text-gray-500 peer-checked:border-[#ff5c00] peer-checked:text-[#ff5c00] transition-all cursor-pointer dark:bg-white/5 dark:border-white/10 dark:text-gray-400">
                       Admin
                     </div>
                   </label>
@@ -130,7 +130,7 @@ function Signup() {
               </button>
             </form>
 
-            <p className="mt-8 text-center text-gray-400 text-[15px]">
+            <p className="mt-8 text-center text-gray-500 text-[15px] dark:text-gray-400">
               Already have an account?{' '}
               <Link to="/login" className="text-[#ff5c00] font-bold hover:underline underline-offset-4">
                 Log in
@@ -143,7 +143,7 @@ function Signup() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
-          className="mt-12 text-center lg:text-left text-gray-600 text-xs font-medium tracking-tight"
+          className="mt-12 text-center lg:text-left text-gray-400 text-xs font-medium tracking-tight dark:text-gray-600"
         >
           <span className="mr-2 opacity-50">PLATFORM</span>
           Built for teams. Designed for efficiency.
