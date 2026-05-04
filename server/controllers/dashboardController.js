@@ -17,15 +17,29 @@ exports.getStats = async (req, res) => {
       ]
     });
 
-    const activeTasks = tasks.filter(t => t.status !== 'Done');
-    const completedTasks = tasks.filter(t => t.status === 'Done');
-    const overdueTasks = activeTasks.filter(t => t.dueDate && new Date(t.dueDate) < new Date());
+    const todoTasks = tasks.filter(t => t.status === 'Todo').length;
+    const inProgressTasks = tasks.filter(t => t.status === 'In Progress').length;
+    const doneTasks = tasks.filter(t => t.status === 'Done').length;
+
+    const highPriority = tasks.filter(t => t.priority === 'High').length;
+    const mediumPriority = tasks.filter(t => t.priority === 'Medium').length;
+    const lowPriority = tasks.filter(t => t.priority === 'Low').length;
 
     res.json({
       totalProjects: projects.length,
-      activeTasks: activeTasks.length,
-      completedTasks: completedTasks.length,
-      overdueTasks: overdueTasks.length
+      activeTasks: todoTasks + inProgressTasks,
+      completedTasks: doneTasks,
+      overdueTasks: tasks.filter(t => t.status !== 'Done' && t.dueDate && new Date(t.dueDate) < new Date()).length,
+      taskStatusDistribution: [
+        { name: 'Todo', value: todoTasks },
+        { name: 'In Progress', value: inProgressTasks },
+        { name: 'Done', value: doneTasks }
+      ],
+      priorityDistribution: [
+        { name: 'High', value: highPriority },
+        { name: 'Medium', value: mediumPriority },
+        { name: 'Low', value: lowPriority }
+      ]
     });
   } catch (err) {
     res.status(500).json({ message: err.message });
