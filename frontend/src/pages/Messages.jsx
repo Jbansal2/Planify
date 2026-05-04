@@ -73,15 +73,14 @@ function Messages() {
   );
 
   return (
-    <div className="h-screen bg-gray-50 flex overflow-hidden dark:bg-[#0b0b0b] transition-colors duration-300">
+    <div className="h-screen bg-gray-50 flex flex-col lg:flex-row font-sans dark:bg-[#0b0b0b] transition-colors duration-300 overflow-hidden">
       <Sidebar />
-
-      <main className="flex-1 p-8 lg:p-12 overflow-hidden flex flex-col">
+      <main className="flex-1 p-4 sm:p-8 lg:p-12 flex flex-col min-h-0">
         <Header title="Messages" />
 
-        <div className="flex-1 flex gap-6 min-h-0">
+        <div className="flex-1 flex gap-6 min-h-0 relative">
           {/* Left Panel: Contacts List */}
-          <div className="w-1/3 bg-white border border-gray-200 rounded-[2.5rem] overflow-hidden flex flex-col shadow-sm dark:bg-[#111113] dark:border-white/5 dark:shadow-2xl transition-colors duration-300">
+          <div className={`${activeChat && 'hidden lg:flex'} w-full lg:w-1/3 bg-white border border-gray-200 rounded-[2.5rem] overflow-hidden flex flex-col shadow-sm dark:bg-[#111113] dark:border-white/5 dark:shadow-2xl transition-colors duration-300`}>
             <div className="p-8 border-b border-gray-100 bg-gray-50/50 dark:border-white/5 dark:bg-white/[0.02]">
               <div className="flex items-center justify-between mb-6">
                 <div>
@@ -155,7 +154,7 @@ function Messages() {
           </div>
 
           {/* Right Panel: Active Chat */}
-          <div className="w-2/3 bg-white border border-gray-200 rounded-[2.5rem] flex flex-col overflow-hidden shadow-sm dark:bg-[#111113] dark:border-white/5 dark:shadow-2xl relative transition-colors duration-300">
+          <div className={`${!activeChat && 'hidden lg:flex'} flex-1 bg-white border border-gray-200 rounded-[2.5rem] overflow-hidden flex flex-col shadow-sm dark:bg-[#111113] dark:border-white/5 dark:shadow-2xl transition-colors duration-300`}>
             <AnimatePresence mode="wait">
               {activeChat ? (
                 <motion.div 
@@ -166,8 +165,16 @@ function Messages() {
                   className="flex flex-col h-full"
                 >
                   {/* Chat Header */}
-                  <div className="p-8 border-b border-gray-100 bg-gray-50/30 flex items-center justify-between dark:border-white/5 dark:bg-white/[0.02]">
-                    <div className="flex items-center gap-5">
+                  <div className="p-6 sm:p-8 border-b border-gray-100 bg-gray-50/30 flex items-center justify-between dark:border-white/5 dark:bg-white/[0.02]">
+                    <div className="flex items-center gap-4">
+                      <button 
+                        onClick={() => setActiveChat(null)}
+                        className="lg:hidden p-2 -ml-2 text-gray-400 hover:text-[#ff5c00]"
+                      >
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+                        </svg>
+                      </button>
                       <div className="w-14 h-14 rounded-2xl bg-[#ff5c00] text-white flex items-center justify-center font-bold text-xl shadow-[0_10px_20px_rgba(255,92,0,0.2)]">
                         {activeChat.name.charAt(0).toUpperCase()}
                       </div>

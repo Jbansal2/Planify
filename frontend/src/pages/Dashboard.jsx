@@ -70,11 +70,11 @@ function Dashboard() {
   const isDark = theme === 'dark';
 
   return (
-    <div className="h-screen bg-gray-50 flex overflow-hidden font-sans dark:bg-[#0b0b0b] transition-colors duration-300">
+    <div className="min-h-screen bg-gray-50 flex flex-col lg:flex-row font-sans dark:bg-[#0b0b0b] transition-colors duration-300">
       <Sidebar />
 
       {/* Main Content */}
-      <main className="flex-1 p-8 lg:p-12 overflow-y-auto">
+      <main className="flex-1 p-4 sm:p-8 lg:p-12 overflow-y-auto">
         <Header title="Dashboard" />
 
         {/* Stats Grid */}

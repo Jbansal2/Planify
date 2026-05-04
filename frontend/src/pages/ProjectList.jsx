@@ -54,10 +54,10 @@ function ProjectList() {
   const avatarColors = ['bg-blue-500', 'bg-green-500', 'bg-purple-500', 'bg-pink-500', 'bg-yellow-500'];
 
   return (
-    <div className="h-screen bg-gray-50 flex overflow-hidden dark:bg-[#0b0b0b] transition-colors duration-300">
+    <div className="min-h-screen bg-gray-50 flex flex-col lg:flex-row font-sans dark:bg-[#0b0b0b] transition-colors duration-300">
       <Sidebar />
 
-      <main className="flex-1 p-8 lg:p-12 overflow-y-auto">
+      <main className="flex-1 p-4 sm:p-8 lg:p-12 overflow-y-auto">
         <Header title="Projects" />
 
         <div className="flex justify-between items-center mb-8 border-b border-gray-100 pb-4 dark:border-white/5">

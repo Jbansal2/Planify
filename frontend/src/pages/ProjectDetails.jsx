@@ -78,9 +78,9 @@ function ProjectDetails() {
   };
 
   return (
-    <div className="h-screen bg-gray-50 flex overflow-hidden dark:bg-[#0b0b0b] transition-colors duration-300">
+    <div className="min-h-screen bg-gray-50 flex flex-col lg:flex-row font-sans dark:bg-[#0b0b0b] transition-colors duration-300">
       <Sidebar />
-      <main className="flex-1 p-8 lg:p-12 overflow-y-auto">
+      <main className="flex-1 p-4 sm:p-8 lg:p-12 overflow-y-auto">
       <Header title="Task Board" />
       
       <div className="flex justify-between items-center mb-8 border-b border-gray-100 pb-4 dark:border-white/5">
