@@ -1,23 +1,23 @@
-# ✳️ Planify - Premium Project Management Dashboard
+# Planify - Premium Project Management Dashboard
 
 Planify is a high-performance, full-stack project management ecosystem designed with a premium "Webflow-inspired" dark aesthetic. It offers teams a seamless way to collaborate, track projects, manage tasks, and communicate in real-time within a unified, secure workspace.
 
 ---
 
-## ✨ Key Features
+## Key Features
 
-### 📊 Dynamic Dashboard
+### Dynamic Dashboard
 - **Real-time Overview**: Get an instant snapshot of total projects, active tasks, and team members.
 - **Visual Analytics**: Interactive task distribution charts and recent activity feeds.
 - **Smart Notifications**: Integrated alert system to keep you updated on project milestones and mentions.
 
-### 📁 Project & Task Management
+### Project & Task Management
 - **Centralized Projects**: Beautiful grid/list views of all ongoing projects with progress tracking.
 - **Agile Task Boards**: A professional Kanban-style interface to manage tasks across "Todo", "In Progress", and "Done".
 - **Due Date Logic**: Visual indicators for upcoming and overdue tasks.
 - **Admin Control**: Secure project creation and task assignment capabilities.
 
-### 💬 Real-time Messaging
+### Real-time Messaging
 - **Direct Messaging**: A sleek, two-column chat interface for 1-on-1 communication.
 - **Auto-Sync Polling**: Real-time feeling chat experience without page refreshes.
 - **Searchable Contacts**: Quickly find and chat with any member of your workspace.
@@ -26,13 +26,13 @@ Planify is a high-performance, full-stack project management ecosystem designed 
 - **Member Management**: Professional row-based team list with role indicators (Admin/Member).
 - **Security Controls**: Admins can easily manage user access and account statuses.
 
-### ⚙️ Personalized Experience
+### Personalized Experience
 - **Profile Management**: Update personal details (Name, Email) and account security (Password) instantly.
 - **Fixed Sidebar Layout**: Intuitive navigation that stays fixed while the main workspace scrolls smoothly.
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### Frontend
 - **React.js**: Modern component-based UI logic.
@@ -49,7 +49,7 @@ Planify is a high-performance, full-stack project management ecosystem designed 
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### 1. Prerequisites
 - **Node.js** (v16.x or higher)
@@ -96,23 +96,6 @@ cd frontend
 npm run dev
 ```
 Navigate to `http://localhost:5173` to see the app in action.
-
----
-
-## Project Structure
-
-```text
-├── frontend/             # React Frontend (Vite)
-│   ├── src/              # Source code
-│   ├── public/           # Static assets
-│   └── package.json      # Dependencies
-├── server/               # Express Backend
-│   ├── models/           # Mongoose Schemas
-│   ├── routes/           # API Endpoints
-│   └── server.js         # Entry point
-├── .gitignore            # Root gitignore
-└── README.md             # Project documentation
-```
 
 ---
 
