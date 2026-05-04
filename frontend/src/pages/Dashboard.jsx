@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
-import axios from 'axios';
+import axios from '../api/axios';
 import { Link } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
@@ -23,6 +23,7 @@ function Dashboard() {
     priorityDistribution: []
   });
   const [notifications, setNotifications] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     fetchDashboardData();
@@ -30,19 +31,22 @@ function Dashboard() {
 
   const fetchDashboardData = async () => {
     try {
-      const statsRes = await axios.get('https://backend-production-b33cd.up.railway.app/api/dashboard/stats');
+      setIsLoading(true);
+      const statsRes = await axios.get('/api/dashboard/stats');
       setStats(statsRes.data);
 
-      const notifRes = await axios.get('https://backend-production-b33cd.up.railway.app/api/dashboard/notifications');
+      const notifRes = await axios.get('/api/dashboard/notifications');
       setNotifications(notifRes.data);
     } catch (err) {
       console.error('Failed to fetch dashboard data', err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const markNotificationRead = async (id) => {
     try {
-      await axios.patch(`https://backend-production-b33cd.up.railway.app/api/dashboard/notifications/${id}/read`);
+      await axios.patch(`/api/dashboard/notifications/${id}/read`);
       setNotifications(notifications.map(n => n._id === id ? { ...n, read: true } : n));
     } catch (err) {
       console.error('Failed to mark notification read');
@@ -101,7 +105,7 @@ function Dashboard() {
           >
             <h3 className="text-xl font-bold text-gray-900 mb-6 dark:text-white">Task Status Distribution</h3>
             <div className="h-[300px] w-full">
-              {stats.taskStatusDistribution?.length > 0 ? (
+              {!isLoading && stats.taskStatusDistribution?.some(t => t.value > 0) ? (
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie
@@ -130,7 +134,10 @@ function Dashboard() {
                   </PieChart>
                 </ResponsiveContainer>
               ) : (
-                <div className="h-full flex items-center justify-center text-gray-500 text-sm">No task data available</div>
+                <div className="h-full flex flex-col items-center justify-center text-gray-500 text-sm gap-2">
+                  <div className="text-4xl">📊</div>
+                  <p>{isLoading ? 'Loading charts...' : 'No task data available yet'}</p>
+                </div>
               )}
             </div>
           </motion.div>
@@ -144,7 +151,7 @@ function Dashboard() {
           >
             <h3 className="text-xl font-bold text-gray-900 mb-6 dark:text-white">Priority Breakdown</h3>
             <div className="h-[300px] w-full">
-              {stats.priorityDistribution?.length > 0 ? (
+              {!isLoading && stats.priorityDistribution?.some(p => p.value > 0) ? (
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={stats.priorityDistribution}>
                     <CartesianGrid strokeDasharray="3 3" stroke={isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)"} vertical={false} />
@@ -178,7 +185,10 @@ function Dashboard() {
                   </BarChart>
                 </ResponsiveContainer>
               ) : (
-                <div className="h-full flex items-center justify-center text-gray-500 text-sm">No priority data available</div>
+                <div className="h-full flex flex-col items-center justify-center text-gray-500 text-sm gap-2">
+                  <div className="text-4xl">📈</div>
+                  <p>{isLoading ? 'Loading charts...' : 'No priority data available yet'}</p>
+                </div>
               )}
             </div>
           </motion.div>

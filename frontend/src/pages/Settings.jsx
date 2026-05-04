@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
-import axios from 'axios';
+import axios from '../api/axios';
 import { motion, AnimatePresence } from 'framer-motion';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
@@ -34,7 +34,7 @@ function Settings() {
     setProfileMsg({ type: '', text: '' });
 
     try {
-      const res = await axios.put('https://backend-production-b33cd.up.railway.app/api/users/profile', profileData);
+      const res = await axios.put('/api/users/profile', profileData);
       updateUser(res.data);
       setProfileMsg({ type: 'success', text: 'Profile updated successfully!' });
     } catch (err) {
@@ -54,7 +54,7 @@ function Settings() {
 
     setIsSavingPassword(true);
     try {
-      await axios.put('https://backend-production-b33cd.up.railway.app/api/users/password', {
+      await axios.put('/api/users/password', {
         currentPassword: passwordData.currentPassword,
         newPassword: passwordData.newPassword
       });

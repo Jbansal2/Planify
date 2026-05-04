@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import axios from 'axios';
+import axios from '../api/axios';
 import { useAuth } from '../context/AuthContext';
 
 import Sidebar from '../components/Sidebar';
@@ -26,7 +26,7 @@ function ProjectDetails() {
 
   const fetchTasks = async () => {
     try {
-      const res = await axios.get(`https://backend-production-b33cd.up.railway.app/api/tasks/project/${id}`);
+      const res = await axios.get(`/api/tasks/project/${id}`);
       setTasks(res.data);
     } catch (err) {
       console.error('Failed to fetch tasks');
@@ -35,7 +35,7 @@ function ProjectDetails() {
 
   const fetchUsers = async () => {
     try {
-      const res = await axios.get('https://backend-production-b33cd.up.railway.app/api/users');
+      const res = await axios.get('/api/users');
       setUsers(res.data);
     } catch (err) {
       console.error('Failed to fetch users');
@@ -46,7 +46,7 @@ function ProjectDetails() {
     e.preventDefault();
     setIsLoading(true);
     try {
-      await axios.post('https://backend-production-b33cd.up.railway.app/api/tasks', { ...newTask, project: id });
+      await axios.post('/api/tasks', { ...newTask, project: id });
       setShowModal(false);
       setNewTask({ title: '', description: '', status: 'Todo', priority: 'Medium', assignee: '', dueDate: '' });
       fetchTasks();
@@ -59,7 +59,7 @@ function ProjectDetails() {
 
   const updateTaskStatus = async (taskId, newStatus) => {
     try {
-      await axios.patch(`https://backend-production-b33cd.up.railway.app/api/tasks/${taskId}`, { status: newStatus });
+      await axios.patch(`/api/tasks/${taskId}`, { status: newStatus });
       fetchTasks();
     } catch (err) {
       console.error('Failed to update task');

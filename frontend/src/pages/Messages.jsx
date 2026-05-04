@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
-import axios from 'axios';
+import axios from '../api/axios';
 import { motion, AnimatePresence } from 'framer-motion';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
@@ -36,7 +36,7 @@ function Messages() {
 
   const fetchContacts = async () => {
     try {
-      const res = await axios.get('https://backend-production-b33cd.up.railway.app/api/users');
+      const res = await axios.get('/api/users');
       const otherUsers = res.data.filter(u => u._id !== user.id);
       setContacts(otherUsers);
       setIsLoading(false);
@@ -47,7 +47,7 @@ function Messages() {
 
   const fetchMessages = async (userId) => {
     try {
-      const res = await axios.get(`https://backend-production-b33cd.up.railway.app/api/messages/${userId}`);
+      const res = await axios.get(`/api/messages/${userId}`);
       setMessages(res.data);
     } catch (err) {
       console.error('Failed to fetch messages', err);
@@ -60,7 +60,7 @@ function Messages() {
 
     try {
       const payload = { receiverId: activeChat._id, content: newMessage };
-      const res = await axios.post('https://backend-production-b33cd.up.railway.app/api/messages', payload);
+      const res = await axios.post('/api/messages', payload);
       setMessages([...messages, res.data]);
       setNewMessage('');
     } catch (err) {

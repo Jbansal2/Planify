@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
-import axios from 'axios';
+import axios from '../api/axios';
 import { Navigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
@@ -22,18 +22,38 @@ function Team() {
 
   const fetchUsers = async () => {
     try {
-      const res = await axios.get('https://backend-production-b33cd.up.railway.app/api/users');
+      const res = await axios.get('/api/users');
       setUsers(res.data);
     } catch (err) {
-      console.error('Failed to fetch team members', err);
+      console.error('Failed to fetch users');
     } finally {
       setIsLoading(false);
     }
   };
 
+  const handleUpdateRole = async (userId, newRole) => {
+    try {
+      await axios.patch(`/api/users/${userId}/role`, { role: newRole });
+      fetchUsers();
+    } catch (err) {
+      alert('Failed to update role');
+    }
+  };
+
+  const handleDeleteUser = async (userId) => {
+    if (window.confirm('Are you sure you want to remove this member?')) {
+      try {
+        await axios.delete(`/api/users/${userId}`);
+        fetchUsers();
+      } catch (err) {
+        alert('Failed to delete user');
+      }
+    }
+  };
+
   const toggleBlockStatus = async (userId) => {
     try {
-      const res = await axios.patch(`https://backend-production-b33cd.up.railway.app/api/users/${userId}/block`);
+      const res = await axios.patch(`/api/users/${userId}/block`);
       setUsers(users.map(u => u._id === userId ? { ...u, status: res.data.user.status } : u));
     } catch (err) {
       alert(err.response?.data?.message || 'Failed to update user status');

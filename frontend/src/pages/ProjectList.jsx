@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
-import axios from 'axios';
+import axios from '../api/axios';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -20,7 +20,7 @@ function ProjectList() {
 
   const fetchProjects = async () => {
     try {
-      const res = await axios.get('https://backend-production-b33cd.up.railway.app/api/projects');
+      const res = await axios.get('/api/projects');
       setProjects(res.data);
     } catch (err) {
       console.error('Failed to fetch projects');
@@ -31,7 +31,7 @@ function ProjectList() {
     e.preventDefault();
     setIsLoading(true);
     try {
-      await axios.post('https://backend-production-b33cd.up.railway.app/api/projects', newProject);
+      await axios.post('/api/projects', newProject);
       setShowModal(false);
       setNewProject({ title: '', description: '', dueDate: '' });
       fetchProjects();
