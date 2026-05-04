@@ -31,7 +31,7 @@ function Settings() {
     setProfileMsg({ type: '', text: '' });
 
     try {
-      const res = await axios.put('http://localhost:5000/api/users/profile', profileData);
+      const res = await axios.put('https://backend-production-b33cd.up.railway.app/api/users/profile', profileData);
       updateUser(res.data);
       setProfileMsg({ type: 'success', text: 'Profile updated successfully!' });
     } catch (err) {
@@ -51,7 +51,7 @@ function Settings() {
 
     setIsSavingPassword(true);
     try {
-      await axios.put('http://localhost:5000/api/users/password', {
+      await axios.put('https://backend-production-b33cd.up.railway.app/api/users/password', {
         currentPassword: passwordData.currentPassword,
         newPassword: passwordData.newPassword
       });

@@ -26,7 +26,7 @@ function ProjectDetails() {
 
   const fetchTasks = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/tasks/project/${id}`);
+      const res = await axios.get(`https://backend-production-b33cd.up.railway.app/api/tasks/project/${id}`);
       setTasks(res.data);
     } catch (err) {
       console.error('Failed to fetch tasks');
@@ -35,7 +35,7 @@ function ProjectDetails() {
 
   const fetchUsers = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/users');
+      const res = await axios.get('https://backend-production-b33cd.up.railway.app/api/users');
       setUsers(res.data);
     } catch (err) {
       console.error('Failed to fetch users');
@@ -46,7 +46,7 @@ function ProjectDetails() {
     e.preventDefault();
     setIsLoading(true);
     try {
-      await axios.post('http://localhost:5000/api/tasks', { ...newTask, project: id });
+      await axios.post('https://backend-production-b33cd.up.railway.app/api/tasks', { ...newTask, project: id });
       setShowModal(false);
       setNewTask({ title: '', description: '', status: 'Todo', assignee: '', dueDate: '' });
       fetchTasks();
@@ -59,7 +59,7 @@ function ProjectDetails() {
 
   const updateTaskStatus = async (taskId, newStatus) => {
     try {
-      await axios.patch(`http://localhost:5000/api/tasks/${taskId}`, { status: newStatus });
+      await axios.patch(`https://backend-production-b33cd.up.railway.app/api/tasks/${taskId}`, { status: newStatus });
       fetchTasks();
     } catch (err) {
       console.error('Failed to update task');

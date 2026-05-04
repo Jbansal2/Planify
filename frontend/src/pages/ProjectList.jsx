@@ -20,7 +20,7 @@ function ProjectList() {
 
   const fetchProjects = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/projects');
+      const res = await axios.get('https://backend-production-b33cd.up.railway.app/api/projects');
       setProjects(res.data);
     } catch (err) {
       console.error('Failed to fetch projects');
@@ -31,7 +31,7 @@ function ProjectList() {
     e.preventDefault();
     setIsLoading(true);
     try {
-      await axios.post('http://localhost:5000/api/projects', newProject);
+      await axios.post('https://backend-production-b33cd.up.railway.app/api/projects', newProject);
       setShowModal(false);
       setNewProject({ title: '', description: '', dueDate: '' });
       fetchProjects();

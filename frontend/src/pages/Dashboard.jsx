@@ -24,10 +24,10 @@ function Dashboard() {
 
   const fetchDashboardData = async () => {
     try {
-      const statsRes = await axios.get('http://localhost:5000/api/dashboard/stats');
+      const statsRes = await axios.get('https://backend-production-b33cd.up.railway.app/api/dashboard/stats');
       setStats(statsRes.data);
 
-      const notifRes = await axios.get('http://localhost:5000/api/dashboard/notifications');
+      const notifRes = await axios.get('https://backend-production-b33cd.up.railway.app/api/dashboard/notifications');
       setNotifications(notifRes.data);
     } catch (err) {
       console.error('Failed to fetch dashboard data', err);
@@ -36,7 +36,7 @@ function Dashboard() {
 
   const markNotificationRead = async (id) => {
     try {
-      await axios.patch(`http://localhost:5000/api/dashboard/notifications/${id}/read`);
+      await axios.patch(`https://backend-production-b33cd.up.railway.app/api/dashboard/notifications/${id}/read`);
       setNotifications(notifications.map(n => n._id === id ? { ...n, read: true } : n));
     } catch (err) {
       console.error('Failed to mark notification read');

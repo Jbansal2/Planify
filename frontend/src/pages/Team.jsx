@@ -22,7 +22,7 @@ function Team() {
 
   const fetchUsers = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/users');
+      const res = await axios.get('https://backend-production-b33cd.up.railway.app/api/users');
       setUsers(res.data);
     } catch (err) {
       console.error('Failed to fetch team members', err);
@@ -33,7 +33,7 @@ function Team() {
 
   const toggleBlockStatus = async (userId) => {
     try {
-      const res = await axios.patch(`http://localhost:5000/api/users/${userId}/block`);
+      const res = await axios.patch(`https://backend-production-b33cd.up.railway.app/api/users/${userId}/block`);
       setUsers(users.map(u => u._id === userId ? { ...u, status: res.data.user.status } : u));
     } catch (err) {
       alert(err.response?.data?.message || 'Failed to update user status');

@@ -36,7 +36,7 @@ function Messages() {
 
   const fetchContacts = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/users');
+      const res = await axios.get('https://backend-production-b33cd.up.railway.app/api/users');
       const otherUsers = res.data.filter(u => u._id !== user.id);
       setContacts(otherUsers);
       setIsLoading(false);
@@ -47,7 +47,7 @@ function Messages() {
 
   const fetchMessages = async (userId) => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/messages/${userId}`);
+      const res = await axios.get(`https://backend-production-b33cd.up.railway.app/api/messages/${userId}`);
       setMessages(res.data);
     } catch (err) {
       console.error('Failed to fetch messages', err);
@@ -60,7 +60,7 @@ function Messages() {
 
     try {
       const payload = { receiverId: activeChat._id, content: newMessage };
-      const res = await axios.post('http://localhost:5000/api/messages', payload);
+      const res = await axios.post('https://backend-production-b33cd.up.railway.app/api/messages', payload);
       setMessages([...messages, res.data]);
       setNewMessage('');
     } catch (err) {
