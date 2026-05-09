@@ -14,6 +14,7 @@ const taskSchema = new mongoose.Schema({
     default: 'Medium' 
   },
   assignee: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  assignees: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   project: { type: mongoose.Schema.Types.ObjectId, ref: 'Project', required: true },
   dueDate: { type: Date },
   createdAt: { type: Date, default: Date.now }

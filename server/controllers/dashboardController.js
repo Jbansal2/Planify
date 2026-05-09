@@ -11,12 +11,27 @@ exports.getStats = async (req, res) => {
     });
     
     const projectIds = projects.map(p => p._id);
-    const tasks = await Task.find({
-      $or: [
-        { project: { $in: projectIds } },
-        { assignee: userId }
-      ]
-    });
+    
+    // Filter tasks: Members only see assigned tasks, Admins see all tasks in their projects
+    let taskQuery;
+    if (req.user.role === 'Admin') {
+      taskQuery = {
+        $or: [
+          { project: { $in: projectIds } },
+          { assignee: userId },
+          { assignees: userId }
+        ]
+      };
+    } else {
+      taskQuery = {
+        $or: [
+          { assignee: userId },
+          { assignees: userId }
+        ]
+      };
+    }
+
+    const tasks = await Task.find(taskQuery);
 
     const todoTasks = tasks.filter(t => t.status === 'Todo').length;
     const inProgressTasks = tasks.filter(t => t.status === 'In Progress').length;
@@ -29,14 +44,18 @@ exports.getStats = async (req, res) => {
     // Real Team Progress Calculation
     const teamStatsMap = {};
     tasks.forEach(task => {
-      if (task.assignee) {
-        const assigneeId = task.assignee.toString();
+      const assigneeIds = [
+        ...(task.assignees || []).map(member => member.toString()),
+        ...(task.assignee ? [task.assignee.toString()] : [])
+      ];
+
+      assigneeIds.forEach(assigneeId => {
         if (!teamStatsMap[assigneeId]) {
           teamStatsMap[assigneeId] = { total: 0, completed: 0 };
         }
         teamStatsMap[assigneeId].total++;
         if (task.status === 'Done') teamStatsMap[assigneeId].completed++;
-      }
+      });
     });
 
     // Get user details for the team members

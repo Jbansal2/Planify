@@ -11,8 +11,10 @@ function ProjectDetails() {
   const { id } = useParams();
   const { user } = useAuth();
   const [tasks, setTasks] = useState([]);
-  const [showModal, setShowModal] = useState(false);
-  const [newTask, setNewTask] = useState({ title: '', description: '', status: 'Todo', priority: 'Medium', dueDate: '' });
+  const [showTaskModal, setShowTaskModal] = useState(false);
+  const [taskModalMode, setTaskModalMode] = useState('create');
+  const [editingTaskId, setEditingTaskId] = useState(null);
+  const [taskForm, setTaskForm] = useState({ title: '', description: '', status: 'Todo', priority: 'Medium', assignees: [], dueDate: '' });
   const [isLoading, setIsLoading] = useState(false);
 
   const [users, setUsers] = useState([]);
@@ -46,14 +48,57 @@ function ProjectDetails() {
     e.preventDefault();
     setIsLoading(true);
     try {
-      await axios.post('/api/tasks', { ...newTask, project: id });
-      setShowModal(false);
-      setNewTask({ title: '', description: '', status: 'Todo', priority: 'Medium', assignee: '', dueDate: '' });
+      const payload = { ...taskForm, project: id };
+
+      if (taskModalMode === 'edit' && editingTaskId) {
+        await axios.patch(`/api/tasks/${editingTaskId}`, payload);
+      } else {
+        await axios.post('/api/tasks', payload);
+      }
+
+      setShowTaskModal(false);
+      setEditingTaskId(null);
+      setTaskModalMode('create');
+      setTaskForm({ title: '', description: '', status: 'Todo', priority: 'Medium', assignees: [], dueDate: '' });
       fetchTasks();
     } catch (err) {
-      alert('Failed to create task');
+      alert(err.response?.data?.message || 'Failed to save task');
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const openCreateTaskModal = () => {
+    setTaskModalMode('create');
+    setEditingTaskId(null);
+    setTaskForm({ title: '', description: '', status: 'Todo', priority: 'Medium', assignees: [], dueDate: '' });
+    setShowTaskModal(true);
+  };
+
+  const openEditTaskModal = (task) => {
+    setTaskModalMode('edit');
+    setEditingTaskId(task._id);
+    setTaskForm({
+      title: task.title || '',
+      description: task.description || '',
+      status: task.status || 'Todo',
+      priority: task.priority || 'Medium',
+      assignees: (task.assignees && task.assignees.length > 0)
+        ? task.assignees.map(member => member._id || member)
+        : (task.assignee ? [task.assignee._id || task.assignee] : []),
+      dueDate: task.dueDate ? new Date(task.dueDate).toISOString().split('T')[0] : ''
+    });
+    setShowTaskModal(true);
+  };
+
+  const handleDeleteTask = async (taskId) => {
+    if (!window.confirm('Delete this task?')) return;
+
+    try {
+      await axios.delete(`/api/tasks/${taskId}`);
+      fetchTasks();
+    } catch (err) {
+      alert(err.response?.data?.message || 'Failed to delete task');
     }
   };
 
@@ -94,7 +139,7 @@ function ProjectDetails() {
         </Link>
         {user?.role === 'Admin' && (
           <button 
-            onClick={() => setShowModal(true)}
+            onClick={openCreateTaskModal}
             className="flex items-center gap-2 bg-white border border-gray-200 hover:bg-gray-50 text-gray-900 font-bold px-6 py-2.5 rounded-xl transition-all shadow-sm dark:bg-[#111113] dark:hover:bg-white/5 dark:border-white/10 dark:text-white dark:shadow-none"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -130,12 +175,20 @@ function ProjectDetails() {
                   </div>
                   <p className="text-gray-500 text-sm mb-4 line-clamp-2">{task.description}</p>
                   
-                  {task.assignee && task.assignee.name && (
+                  {((task.assignees && task.assignees.length > 0) || task.assignee) && (
                     <div className="flex items-center gap-2 mb-3">
-                      <div className="w-6 h-6 rounded-full bg-[#ff5c00]/20 text-[#ff5c00] flex items-center justify-center text-xs font-bold uppercase">
-                        {task.assignee.name.charAt(0)}
+                      <div className="flex -space-x-2">
+                        {(task.assignees && task.assignees.length > 0 ? task.assignees : [task.assignee]).filter(Boolean).map((member, index) => (
+                          <div
+                            key={member._id || member.id || index}
+                            className="w-6 h-6 rounded-full bg-[#ff5c00]/20 text-[#ff5c00] flex items-center justify-center text-[10px] font-bold uppercase border border-white dark:border-[#111113]"
+                            title={member.name}
+                          >
+                            {member.name ? member.name.charAt(0) : '?'}
+                          </div>
+                        ))}
                       </div>
-                      <span className="text-xs text-gray-500">Assigned to <span className="text-gray-700 font-medium dark:text-gray-300">{task.assignee.name}</span></span>
+                      <span className="text-xs text-gray-500">Assigned to {((task.assignees && task.assignees.length > 0) ? task.assignees.length : 1)} member{((task.assignees && task.assignees.length > 0) ? task.assignees.length : 1) > 1 ? 's' : ''}</span>
                     </div>
                   )}
 
@@ -161,6 +214,23 @@ function ProjectDetails() {
                       </button>
                     ))}
                   </div>
+
+                  {user?.role === 'Admin' && (
+                    <div className="flex items-center gap-2 mt-4 pt-4 border-t border-gray-100 dark:border-white/5">
+                      <button
+                        onClick={() => openEditTaskModal(task)}
+                        className="text-[10px] uppercase font-bold text-blue-600 hover:underline"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDeleteTask(task._id)}
+                        className="text-[10px] uppercase font-bold text-red-500 hover:underline"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  )}
                 </motion.div>
               ))}
             </div>
@@ -169,13 +239,13 @@ function ProjectDetails() {
       </div>
 
       <AnimatePresence>
-        {showModal && (
+        {showTaskModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-6">
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={() => setShowModal(false)}
+              onClick={() => setShowTaskModal(false)}
               className="absolute inset-0 bg-black/60 backdrop-blur-sm"
             />
             <motion.div 
@@ -184,28 +254,30 @@ function ProjectDetails() {
               exit={{ opacity: 0, scale: 0.9 }}
               className="relative bg-white border border-gray-200 w-full max-w-md p-8 rounded-[2.5rem] shadow-2xl dark:bg-[#111113] dark:border-white/10"
             >
-              <h2 className="text-2xl font-bold text-gray-900 mb-6 dark:text-white">Create New Task</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-6 dark:text-white">
+                {taskModalMode === 'edit' ? 'Edit Task' : 'Create New Task'}
+              </h2>
               <form onSubmit={handleCreateTask} className="space-y-4">
                 <input
                   type="text"
                   placeholder="Task Title"
                   required
-                  value={newTask.title}
-                  onChange={(e) => setNewTask({...newTask, title: e.target.value})}
+                  value={taskForm.title}
+                  onChange={(e) => setTaskForm({...taskForm, title: e.target.value})}
                   className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-6 py-4 text-gray-900 placeholder:text-gray-500 focus:outline-none focus:border-[#ff5c00]/50 transition-all dark:bg-white/5 dark:border-white/10 dark:text-white dark:placeholder:text-gray-600"
                 />
                 <textarea
                   placeholder="Task Description"
                   rows="3"
-                  value={newTask.description}
-                  onChange={(e) => setNewTask({...newTask, description: e.target.value})}
+                  value={taskForm.description}
+                  onChange={(e) => setTaskForm({...taskForm, description: e.target.value})}
                   className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-6 py-4 text-gray-900 placeholder:text-gray-500 focus:outline-none focus:border-[#ff5c00]/50 transition-all resize-none dark:bg-white/5 dark:border-white/10 dark:text-white dark:placeholder:text-gray-600"
                 />
                 
                 <div className="grid grid-cols-2 gap-4">
                   <select
-                    value={newTask.priority}
-                    onChange={(e) => setNewTask({...newTask, priority: e.target.value})}
+                    value={taskForm.priority}
+                    onChange={(e) => setTaskForm({...taskForm, priority: e.target.value})}
                     className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-6 py-4 text-gray-900 focus:outline-none focus:border-[#ff5c00]/50 transition-all appearance-none dark:bg-white/5 dark:border-white/10 dark:text-white"
                   >
                     <option value="Low" className="bg-white text-gray-900 dark:bg-[#111113] dark:text-white">Low Priority</option>
@@ -214,11 +286,12 @@ function ProjectDetails() {
                   </select>
 
                   <select
-                    value={newTask.assignee || ''}
-                    onChange={(e) => setNewTask({...newTask, assignee: e.target.value})}
-                    className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-6 py-4 text-gray-900 focus:outline-none focus:border-[#ff5c00]/50 transition-all appearance-none dark:bg-white/5 dark:border-white/10 dark:text-white"
+                    multiple
+                    value={taskForm.assignees}
+                    onChange={(e) => setTaskForm({...taskForm, assignees: Array.from(e.target.selectedOptions, option => option.value)})}
+                    className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-6 py-4 text-gray-900 focus:outline-none focus:border-[#ff5c00]/50 transition-all dark:bg-white/5 dark:border-white/10 dark:text-white min-h-[140px]"
                   >
-                    <option value="" className="bg-white text-gray-500 dark:bg-[#111113] dark:text-gray-400">Unassigned</option>
+                    <option value="" disabled className="bg-white text-gray-500 dark:bg-[#111113] dark:text-gray-400">Select one or more members</option>
                     {users.map(u => (
                       <option key={u._id} value={u._id} className="bg-white text-gray-900 dark:bg-[#111113] dark:text-white">
                         {u.name}
@@ -229,8 +302,8 @@ function ProjectDetails() {
 
                 <input
                   type="date"
-                  value={newTask.dueDate}
-                  onChange={(e) => setNewTask({...newTask, dueDate: e.target.value})}
+                  value={taskForm.dueDate}
+                  onChange={(e) => setTaskForm({...taskForm, dueDate: e.target.value})}
                   className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-6 py-4 text-gray-900 focus:outline-none focus:border-[#ff5c00]/50 transition-all appearance-none [color-scheme:light] dark:[color-scheme:dark] dark:bg-white/5 dark:border-white/10 dark:text-white"
                 />
 
@@ -239,7 +312,7 @@ function ProjectDetails() {
                   disabled={isLoading}
                   className="w-full bg-[#ff5c00] text-white font-bold py-4 rounded-full transition-all hover:bg-[#e55200] disabled:opacity-50 shadow-lg shadow-[#ff5c00]/20"
                 >
-                  {isLoading ? 'Adding...' : 'Add Task'}
+                  {isLoading ? 'Saving...' : taskModalMode === 'edit' ? 'Update Task' : 'Add Task'}
                 </button>
               </form>
             </motion.div>

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const taskController = require('../controllers/taskController');
-const { auth } = require('../middleware/auth');
+const { auth, authorize } = require('../middleware/auth');
 
 // Get all tasks for a project
 router.get('/project/:projectId', auth, taskController.getTasksByProject);
@@ -11,5 +11,8 @@ router.post('/', auth, taskController.createTask);
 
 // Update task status
 router.patch('/:id', auth, taskController.updateTask);
+
+// Delete task (Admin only)
+router.delete('/:id', auth, authorize('Admin'), taskController.deleteTask);
 
 module.exports = router;

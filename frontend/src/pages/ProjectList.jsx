@@ -11,7 +11,10 @@ function ProjectList() {
   const { user } = useAuth();
   const [projects, setProjects] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
   const [newProject, setNewProject] = useState({ title: '', description: '', dueDate: '' });
+  const [editingProjectId, setEditingProjectId] = useState(null);
+  const [editProject, setEditProject] = useState({ title: '', description: '', dueDate: '' });
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -39,6 +42,42 @@ function ProjectList() {
       alert(err.response?.data?.message || 'Failed to create project');
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const openEditModal = (project) => {
+    setEditingProjectId(project._id);
+    setEditProject({
+      title: project.title || '',
+      description: project.description || '',
+      dueDate: project.dueDate ? new Date(project.dueDate).toISOString().split('T')[0] : ''
+    });
+    setShowEditModal(true);
+  };
+
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    try {
+      await axios.patch(`/api/projects/${editingProjectId}`, editProject);
+      setShowEditModal(false);
+      setEditingProjectId(null);
+      fetchProjects();
+    } catch (err) {
+      alert(err.response?.data?.message || 'Failed to update project');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleDelete = async (projectId) => {
+    if (!window.confirm('Delete this project and all its tasks?')) return;
+
+    try {
+      await axios.delete(`/api/projects/${projectId}`);
+      fetchProjects();
+    } catch (err) {
+      alert(err.response?.data?.message || 'Failed to delete project');
     }
   };
 
@@ -140,6 +179,23 @@ function ProjectList() {
                       </svg>
                     </button>
                   </div>
+
+                  {user?.role === 'Admin' && (
+                    <div className="flex items-center gap-3 mb-4 relative z-10">
+                      <button
+                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); openEditModal(project); }}
+                        className="text-xs font-bold text-blue-600 hover:underline"
+                      >
+                        Edit Project
+                      </button>
+                      <button
+                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleDelete(project._id); }}
+                        className="text-xs font-bold text-red-500 hover:underline"
+                      >
+                        Delete Project
+                      </button>
+                    </div>
+                  )}
 
                   {/* Title & Description */}
                   <div className="mb-6">
@@ -246,6 +302,58 @@ function ProjectList() {
                     className="w-full bg-[#ff5c00] text-white font-bold py-4 rounded-full transition-all hover:bg-[#e55200] disabled:opacity-50 mt-4 shadow-lg shadow-[#ff5c00]/20"
                   >
                     {isLoading ? 'Creating...' : 'Create Project'}
+                  </button>
+                </form>
+              </motion.div>
+            </div>
+          )}
+        </AnimatePresence>
+
+        <AnimatePresence>
+          {showEditModal && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-6">
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setShowEditModal(false)}
+                className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+              />
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                className="relative bg-white border border-gray-200 w-full max-w-md p-8 rounded-3xl shadow-2xl dark:bg-[#111113] dark:border-white/10"
+              >
+                <h2 className="text-2xl font-bold text-gray-900 mb-6 dark:text-white">Edit Project</h2>
+                <form onSubmit={handleUpdate} className="space-y-4">
+                  <input
+                    type="text"
+                    placeholder="Project Title"
+                    required
+                    value={editProject.title}
+                    onChange={(e) => setEditProject({...editProject, title: e.target.value})}
+                    className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-6 py-4 text-gray-900 placeholder:text-gray-500 focus:outline-none focus:border-[#ff5c00]/50 transition-all dark:bg-white/5 dark:border-white/10 dark:text-white dark:placeholder:text-gray-600"
+                  />
+                  <textarea
+                    placeholder="Project Description"
+                    rows="3"
+                    value={editProject.description}
+                    onChange={(e) => setEditProject({...editProject, description: e.target.value})}
+                    className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-6 py-4 text-gray-900 placeholder:text-gray-500 focus:outline-none focus:border-[#ff5c00]/50 transition-all resize-none dark:bg-white/5 dark:border-white/10 dark:text-white dark:placeholder:text-gray-600"
+                  />
+                  <input
+                    type="date"
+                    value={editProject.dueDate}
+                    onChange={(e) => setEditProject({...editProject, dueDate: e.target.value})}
+                    className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-6 py-4 text-gray-900 focus:outline-none focus:border-[#ff5c00]/50 transition-all dark:bg-white/5 dark:border-white/10 dark:text-white [color-scheme:light] dark:[color-scheme:dark]"
+                  />
+                  <button 
+                    type="submit"
+                    disabled={isLoading}
+                    className="w-full bg-[#ff5c00] text-white font-bold py-4 rounded-full transition-all hover:bg-[#e55200] disabled:opacity-50 mt-4 shadow-lg shadow-[#ff5c00]/20"
+                  >
+                    {isLoading ? 'Saving...' : 'Update Project'}
                   </button>
                 </form>
               </motion.div>

@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import axios from '../api/axios';
-import { Link } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
 import { useTheme } from '../context/ThemeContext';
@@ -19,16 +18,8 @@ function Dashboard() {
     activeTasks: 0,
     completedTasks: 0,
     overdueTasks: 0,
-    taskStatusDistribution: [
-      { name: 'Todo', value: 5 },
-      { name: 'In Progress', value: 3 },
-      { name: 'Done', value: 8 }
-    ],
-    priorityDistribution: [
-      { name: 'High', value: 4 },
-      { name: 'Medium', value: 7 },
-      { name: 'Low', value: 5 }
-    ],
+    taskStatusDistribution: [],
+    priorityDistribution: [],
     teamProgress: []
   });
   const [notifications, setNotifications] = useState([]);
@@ -43,15 +34,12 @@ function Dashboard() {
       setIsLoading(true);
       const statsRes = await axios.get('/api/dashboard/stats');
       const newData = statsRes.data;
-      
-      // Only update distributions if they have actual data to show
-      const hasStatusData = newData.taskStatusDistribution?.some(t => t.value > 0);
-      const hasPriorityData = newData.priorityDistribution?.some(p => p.value > 0);
 
       setStats(prev => ({
+        ...prev,
         ...newData,
-        taskStatusDistribution: hasStatusData ? newData.taskStatusDistribution : prev.taskStatusDistribution,
-        priorityDistribution: hasPriorityData ? newData.priorityDistribution : prev.priorityDistribution,
+        taskStatusDistribution: newData.taskStatusDistribution || [],
+        priorityDistribution: newData.priorityDistribution || [],
         teamProgress: newData.teamProgress || []
       }));
 
